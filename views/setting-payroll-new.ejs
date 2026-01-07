@@ -1,0 +1,194 @@
+<%- include('partials/header') %>
+<body>
+<style>
+.autocomplete-list {
+  border: 1px solid #ddd;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+}
+.autocomplete-list li {
+  padding: 8px;
+  cursor: pointer;
+}
+.autocomplete-list li:hover {
+  background: #f0f0f0;
+}
+</style>
+
+<div id="app">
+
+<%- include('partials/navbar-menu') %>
+
+<%- include('partials/aside') %>
+
+<%- include('partials/title-bar') %>
+
+  <section class="section main-section">
+        <div class="card mb-6">
+      <header class="card-header">
+        <p class="card-header-title">
+          <span class="icon"><i class="mdi mdi-ballot"></i></span>
+          New payroll officer
+        </p>
+      </header>
+      <div class="card-content">
+        <form action="/settings/payroll-list/create" method="post">
+          <div class="field">
+            <label class="label" for="matriculeSearch">Matricule</label>
+            <div class="field-body">
+              <div class="field">
+                <div class="control icons-left">
+                  <input
+                    class="input"
+                    type="text"
+                    id="employeeSearch"
+                    placeholder="Search employee (matricule or name)"
+                    autocomplete="off"
+                  />
+                  <span class="icon left"><i class="mdi mdi-account"></i></span>
+                  <input type="text" class="input" name="matricule" id="matricule" hidden required>
+                  <ul id="employeeResults" class="autocomplete-list"></ul>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label" for="email">Email</label>
+                <div class="control icons-left">
+                  <input class="input" type="email" placeholder="email@aquarelle.mg" name="email" required>
+                  <span class="icon left"><i class="mdi mdi-mail"></i></span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label" for="password">Password</label>
+                <div class="control icons-left">
+                  <input class="input" type="password" placeholder="Password" name="password" required>
+                  <span class="icon left"><i class="mdi mdi-lock"></i></span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label" for="confirm_password">Confirm Password</label>
+                <div class="control icons-left">
+                  <input class="input" type="password" placeholder="Confirm Password" name="confirm_password" required>
+                  <span class="icon left"><i class="mdi mdi-lock"></i></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+
+          <div class="field grouped">
+            <div class="control">
+              <button type="submit" class="button green">
+                Submit
+              </button>
+            </div>
+            <div class="control">
+              <button type="reset" class="button red" onclick="window.history.back()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </section>
+
+<script>
+const input = document.getElementById('employeeSearch');
+const results = document.getElementById('employeeResults');
+const hiddenInput = document.getElementById('matricule');
+
+let timeout = null;
+
+input.addEventListener('input', () => {
+  clearTimeout(timeout);
+
+  const query = input.value.trim();
+  if (query.length < 2) {
+    results.innerHTML = '';
+    return;
+  }
+
+  timeout = setTimeout(async () => {
+    try {
+      const res = await fetch(`/employee/finding/search-list?q=${query}`);
+
+      if (!res.ok) {
+        console.error('HTTP error', res.status);
+        return;
+      }
+
+      const data = await res.json();
+
+      results.innerHTML = '';
+      data.forEach(emp => {
+        const li = document.createElement('li');
+        li.textContent = `${emp.matricule} - ${emp.fullname}`;
+        li.onclick = () => {
+          input.value = li.textContent;
+          hiddenInput.value = emp.matricule;
+          results.innerHTML = '';
+        };
+        results.appendChild(li);
+      });
+
+    } catch (err) {
+      console.error('Autocomplete error:', err);
+    }
+  }, 300);
+});
+</script>
+<script>
+const input2 = document.getElementById('employeeSearch2');
+const results2 = document.getElementById('employeeResults2');
+const hiddenInput2 = document.getElementById('matricule2');
+
+let timeout2 = null;
+
+input2.addEventListener('input', () => {
+  clearTimeout(timeout2);
+
+  const query = input2.value.trim();
+  if (query.length < 2) {
+    results2.innerHTML = '';
+    return;
+  }
+
+  timeout2 = setTimeout(async () => {
+    try {
+      const res = await fetch(`/employee/finding/search-list?q=${query}`);
+
+      if (!res.ok) {
+        console.error('HTTP error', res.status);
+        return;
+      }
+
+      const data = await res.json();
+
+      results2.innerHTML = '';
+      data.forEach(emp => {
+        const li = document.createElement('li');
+        li.textContent = `${emp.matricule} - ${emp.fullname}`;
+        li.onclick = () => {
+          input2.value = li.textContent;
+          hiddenInput2.value = emp.matricule;
+          results2.innerHTML = '';
+        };
+        results2.appendChild(li);
+      });
+
+    } catch (err) {
+      console.error('Autocomplete error:', err);
+    }
+  }, 300);
+});
+</script>
+
+<%- include('partials/footer') %>
+<!-- Insère ce script juste avant la fermeture de body -->
+</body>
+</html>

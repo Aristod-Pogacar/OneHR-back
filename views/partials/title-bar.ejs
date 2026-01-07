@@ -1,0 +1,28 @@
+<section class="is-title-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <ul>
+      <li>Admin</li>
+      <li>
+        <%= pageTitle %>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="is-hero-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <h1 class="title">
+      <%= pageTitle %>
+        <% if (site=='RABE' ) { %> (Aquarelle ABE) <% } %>
+            <% if (site=='LAG' ) { %> (Laguna ABE) <% } %>
+                <% if (site=='TANA' ) { %> (Aquarelle TANA) <% } %>
+    </h1>
+    <% if (pageTitle=='Settings - Medical Service' ) { %>
+      <button class="button green --jb-modal" type="button" data-target="modal-new">New</button>
+      <% } %>
+        <% if (pageTitle=='Settings - Users' ) { %>
+          <a class="button green px-5" href="/settings/user/new">new</a>
+          <!-- <button class="button green --jb-modal" type="button" data-target="modal-new">New</button> -->
+          <% } %>
+  </div>
+</section>

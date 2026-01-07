@@ -1,0 +1,114 @@
+<aside class="aside is-placed-left is-expanded">
+  <div class="aside-tools">
+    <div>
+      Admin <b class="font-black">One</b>
+    </div>
+  </div>
+  <div class="menu is-menu-main">
+    <p class="menu-label">General</p>
+    <ul class="menu-list">
+      <li class="<% if (pageTitle == 'Dashboard') { %> active <% } %>">
+        <a href="/views">
+          <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
+          <span class="menu-item-label">Dashboard</span>
+        </a>
+      </li>
+    </ul>
+    <p class="menu-label">Employees</p>
+    <ul class="menu-list">
+      <!-- <li class="<% if (pageTitle == 'Employee lists') { %> active <% } %>">
+        <a href="/views-employee">
+          <span class="icon"><i class="mdi mdi-account"></i></span>
+          <span class="menu-item-label">Employee lists</span>
+        </a>
+      </li> -->
+      <li class="<% if (pageTitle == 'Employee lists') { %> active <% } %>">
+        <a class="dropdown">
+          <span class="icon"><i class="mdi mdi-account"></i></span>
+          <span class="menu-item-label">Employee lists</span>
+          <span class="icon"><i
+              class="mdi<% if (pageTitle != 'Employee lists') { %> mdi-plus <% } else { %> mdi-minus <% } %> "></i></span>
+        </a>
+        <ul>
+          <li class="<% if (site == 'RABE') { %> active <% } %>">
+            <a href="/views-employee?site=RABE">
+              <span>Aquarelle ABE</span>
+            </a>
+          </li>
+          <li class="<% if (site == 'LAG') { %> active <% } %>">
+            <a href="/views-employee?site=LAG">
+              <span>Laguna ABE</span>
+            </a>
+          </li>
+          <li class="<% if (site == 'TANA') { %> active <% } %>">
+            <a href="/views-employee?site=TANA">
+              <span>Aquarelle TANA</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <% if (user && user.role===UserRole.ADMIN) { %>
+        <li class="<% if (pageTitle == 'Import from Master File') { %> active <% } %>">
+          <a href="/views-employee/import">
+            <span class="icon"><i class="mdi mdi-upload"></i></span>
+            <span class="menu-item-label">Import</span>
+          </a>
+        </li>
+        <% } %>
+          <li class="<% if (pageTitle == 'Medical Service') { %> active <% } %>">
+            <a href="/views-employee/medical-service/history">
+              <span class="icon"><i class="mdi mdi-medical-bag"></i></span>
+              <span class="menu-item-label">Medical services</span>
+            </a>
+          </li>
+    </ul>
+    <p class="menu-label">Leaves</p>
+    <ul class="menu-list">
+      <li class="<% if (pageTitle == 'Local Leave') { %> active <% } %>">
+        <a href="/views-leave/leave?leaveType=Local_Leave_AMD">
+          <span class="icon"><i class="mdi mdi-calendar-arrow-right"></i></span>
+          <span class="menu-item-label">Local leaves</span>
+        </a>
+      </li>
+      <li class="<% if (pageTitle == 'Permission') { %> active <% } %>">
+        <a href="/views-leave/leave?leaveType=Permission_AMD">
+          <span class="icon"><i class="mdi mdi-calendar-remove"></i></span>
+          <span class="menu-item-label">Permissions</span>
+        </a>
+      </li>
+      <li class="<% if (pageTitle == 'Permission 2h') { %> active <% } %>">
+        <a href="/views-leave/permission-2h">
+          <span class="icon"><i class="mdi mdi-clock-outline"></i></span>
+          <span class="menu-item-label">Permissions 2h</span>
+        </a>
+      </li>
+    </ul>
+    <% if ((user && user.role===UserRole.ADMIN) || (user && user.role===UserRole.PAYROLL_OFFICER)) { %>
+      <p class="menu-label">Settings</p>
+      <ul class="menu-list">
+        <li class="<% if (pageTitle == 'Settings - Medical Service') { %> active <% } %>">
+          <a href="/settings/medical-service">
+            <span class="icon"><i class="mdi mdi-medical-bag"></i></span>
+            <span class="menu-item-label">Medical Services</span>
+          </a>
+        </li>
+        <li
+          class="<% if (pageTitle == 'Settings - Payroll Officers' || pageTitle == 'Settings - New Payroll Officer' || pageTitle == 'Settings - Edit Payroll Officer') { %> active <% } %>">
+          <a href="/settings/user/payroll">
+            <span class="icon"><i class="mdi mdi-view-list"></i></span>
+            <span class="menu-item-label">Payroll officers</span>
+          </a>
+        </li>
+        <% } %>
+          <% if (user && user.role===UserRole.ADMIN) { %>
+            <li
+              class="<% if (pageTitle == 'Settings - Users' || pageTitle == 'Settings - New User' || pageTitle == 'Settings - Edit User') { %> active <% } %>">
+              <a href="/settings/user">
+                <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+                <span class="menu-item-label">Users</span>
+              </a>
+            </li>
+            <% } %>
+      </ul>
+  </div>
+</aside>

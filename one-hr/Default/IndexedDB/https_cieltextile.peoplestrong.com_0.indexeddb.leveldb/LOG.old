@@ -1,0 +1,14 @@
+2025/12/10-15:26:09.579 a0c Reusing MANIFEST D:\Aquarelle\aqua-project\one-hr-back\one-hr\Default\IndexedDB\https_cieltextile.peoplestrong.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/12/10-15:26:09.625 a0c Recovering log #1184
+2025/12/10-15:26:09.626 a0c Reusing old log D:\Aquarelle\aqua-project\one-hr-back\one-hr\Default\IndexedDB\https_cieltextile.peoplestrong.com_0.indexeddb.leveldb/001184.log 
+2025/12/10-15:26:09.626 a0c Delete type=2 #1182
+2025/12/10-15:26:10.818 2e78 Level-0 table #1189: started
+2025/12/10-15:26:10.853 2e78 Level-0 table #1189: 13176 bytes OK
+2025/12/10-15:26:10.881 2e78 Delete type=0 #1184
+2025/12/10-15:26:10.882 a0c Manual compaction at level-0 from ' 3\x01\x00\x00\x00' @ 72057594037927935 : 1 .. ' 4\x01\x00\x00\x00' @ 0 : 0; will stop at ' 3\x01\x00\x00\x05' @ 24249 : 1
+2025/12/10-15:26:10.883 a0c Compacting 1@0 + 1@1 files
+2025/12/10-15:26:10.933 a0c Generated table #1190@0: 171 keys, 30185 bytes
+2025/12/10-15:26:10.934 a0c Compacted 1@0 + 1@1 files => 30185 bytes
+2025/12/10-15:26:10.984 a0c compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/12/10-15:26:10.984 a0c Delete type=2 #1189
+2025/12/10-15:26:10.985 a0c Manual compaction at level-0 from ' 3\x01\x00\x00\x05' @ 24249 : 1 .. ' 4\x01\x00\x00\x00' @ 0 : 0; will stop at (end)

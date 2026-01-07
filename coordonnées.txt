@@ -1,0 +1,21 @@
+    Bouton Punch In/out:
+        X: 870, Y: 170
+    Menu Leave:
+        X: 40, Y: 210
+    Bouton New Leave
+        X: 310, Y: 210
+    
+    Bouton New Leave(Accuei)
+    X: 340, Y: 460
+    
+    Bouton New Leave(Nouvel onglet)
+        X: 370, Y: 250
+
+    Leave Type:
+        X: 160, Y: 240
+    Indisponibilite_AMD:
+        X: 140, Y: 300
+    Local_Leave_AMD:
+        X: 140, Y: 340
+    Permission_AMD:
+        X: 140, Y: 420
