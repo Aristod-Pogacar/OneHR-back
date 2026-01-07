@@ -61,7 +61,7 @@ L’application couvre les sites suivants :
 git clone https://github.com/Aristod-Pogacar/OneHR-back.git
 
 # Accéder au dossier
-cd admin-one
+cd OneHR-back
 
 # Installer les dépendances
 npm install
