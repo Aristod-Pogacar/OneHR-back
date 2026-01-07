@@ -58,10 +58,10 @@ L’application couvre les sites suivants :
 ### Étapes d’installation
 ```bash
 # Cloner le projet
-git clone https://github.com/Aristod-Pogacar/OneHR-back.git
+git clone <repository-url>
 
 # Accéder au dossier
-cd OneHR-back
+cd admin-one
 
 # Installer les dépendances
 npm install
@@ -71,3 +71,79 @@ cp .env.example .env
 
 # Lancer l’application en mode développement
 npm run start:dev
+````
+
+> 💡 **Conseils NestJS**
+>
+> * Utiliser `npm run build` pour la production
+> * Vérifier les permissions MySQL et le charset (`utf8mb4`)
+> * Installer Chrome manuellement sur le serveur si Puppeteer pose problème
+
+---
+
+## 🧑‍💻 Utilisation
+
+* Accéder à l’application via un navigateur web
+* Interface d’administration pour les équipes RH
+* Une partie **API** est disponible pour la communication avec l’application mobile des employés
+
+> ⚠️ Les endpoints API ne sont pas documentés publiquement (projet interne)
+
+---
+
+## 🔐 Configuration
+
+Exemple de fichier `.env` :
+
+```env
+INACTIVITY_TIMEOUT=5000
+# HEADLESS=false
+
+# Configuration MySQL
+DATABASE_TYPE=mysql
+DATABASE_HOST=localhost
+DATABASE_PORT=3306
+DATABASE_USER=root
+DATABASE_PASSWORD=
+DATABASE_NAME=onehr
+
+# Configuration email
+EMAIL_ADRESS=stagedp@aquarabe.mg
+EMAIL_PASSWORD=Sta1234$
+
+# Compte administrateur par défaut
+ADMIN_DEFAULT_LOGIN=onehradmin@admin.aquarelle
+ADMIN_DEFAULT_PASSWORD=onehradmin_1010
+```
+
+⚠️ **Important**
+
+* Ne jamais versionner le fichier `.env`
+* Modifier les identifiants en environnement de production
+
+---
+
+## 🧪 Tests
+
+Aucun test automatisé n’est disponible pour le moment.
+
+---
+
+## 📦 Statut du projet
+
+🚧 **En cours de développement**
+
+---
+
+## 🏢 Licence & usage
+
+Projet **interne**, destiné exclusivement à l’entreprise **Aquarelle**.
+Aucune licence open-source.
+
+---
+
+## ✍️ Auteur
+
+**RAHASINIAINA Aristod Davidson**
+
+```
