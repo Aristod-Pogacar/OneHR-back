@@ -58,7 +58,7 @@ L’application couvre les sites suivants :
 ### Étapes d’installation
 ```bash
 # Cloner le projet
-git clone <repository-url>
+git clone https://github.com/Aristod-Pogacar/OneHR-back.git
 
 # Accéder au dossier
 cd admin-one
