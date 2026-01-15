@@ -107,7 +107,7 @@ export class ViewsEmployeeController {
   // }
 
   @Get('medical-service/history')
-  // @Roles(UserRole.ADMIN)
+  // @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @UseGuards(SessionAuthGuard)
   @Render('medical-service')
   async history(@Req() req, @Query('page') page = 1, @Query('search') search = '', @Query('date') date = "") {
@@ -145,7 +145,7 @@ export class ViewsEmployeeController {
   }
 
   @Get('import')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @Render('employee-import')
   async import(@Req() req) {
@@ -157,7 +157,7 @@ export class ViewsEmployeeController {
   }
 
   @Post('test')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @UseInterceptors(FileInterceptor('file'))
   async importTest(
@@ -172,7 +172,7 @@ export class ViewsEmployeeController {
   }
 
   @Post('import-from-excel')
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @UseInterceptors(FileInterceptor('file'))
   async importFromExcel(

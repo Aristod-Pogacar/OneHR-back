@@ -16,12 +16,6 @@
     </ul>
     <p class="menu-label">Employees</p>
     <ul class="menu-list">
-      <!-- <li class="<% if (pageTitle == 'Employee lists') { %> active <% } %>">
-        <a href="/views-employee">
-          <span class="icon"><i class="mdi mdi-account"></i></span>
-          <span class="menu-item-label">Employee lists</span>
-        </a>
-      </li> -->
       <li class="<% if (pageTitle == 'Employee lists') { %> active <% } %>">
         <a class="dropdown">
           <span class="icon"><i class="mdi mdi-account"></i></span>
@@ -47,7 +41,7 @@
           </li>
         </ul>
       </li>
-      <% if (user && user.role===UserRole.ADMIN) { %>
+      <% if ((user && user.role===UserRole.ADMIN) || (user && user.role===UserRole.SUPER_ADMIN)) { %>
         <li class="<% if (pageTitle == 'Import from Master File') { %> active <% } %>">
           <a href="/views-employee/import">
             <span class="icon"><i class="mdi mdi-upload"></i></span>
@@ -83,7 +77,8 @@
         </a>
       </li>
     </ul>
-    <% if ((user && user.role===UserRole.ADMIN) || (user && user.role===UserRole.PAYROLL_OFFICER)) { %>
+    <% if ((user && user.role===UserRole.ADMIN) || (user && user.role===UserRole.PAYROLL_OFFICER) || (user &&
+      user.role===UserRole.SUPER_ADMIN)) { %>
       <p class="menu-label">Settings</p>
       <ul class="menu-list">
         <li class="<% if (pageTitle == 'Settings - Medical Service') { %> active <% } %>">
@@ -100,7 +95,7 @@
           </a>
         </li>
         <% } %>
-          <% if (user && user.role===UserRole.ADMIN) { %>
+          <% if ((user && user.role===UserRole.ADMIN) || (user && user.role===UserRole.SUPER_ADMIN)) { %>
             <li
               class="<% if (pageTitle == 'Settings - Users' || pageTitle == 'Settings - New User' || pageTitle == 'Settings - Edit User') { %> active <% } %>">
               <a href="/settings/user">

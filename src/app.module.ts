@@ -18,6 +18,8 @@ import { UsersModule } from './users/users.module';
 import { AuthService } from './auth-service/auth-service.service';
 import { AuthViewController } from './auth-service/auth-service.controller';
 import { AuthServiceModule } from './auth-service/auth-service.module';
+import { SeedService } from './database/seed/seed.service';
+import { SeedModule } from './database/seed/seed.module';
 
 @Module({
   imports: [
@@ -61,6 +63,7 @@ import { AuthServiceModule } from './auth-service/auth-service.module';
     PayrollModule,
     UsersModule,
     AuthServiceModule,
+    SeedModule,
   ],
   controllers: [AppController, AuthViewController],
   providers: [AppService, AuthService],

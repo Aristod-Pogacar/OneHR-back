@@ -108,12 +108,12 @@ DATABASE_PASSWORD=
 DATABASE_NAME=onehr
 
 # Configuration email
-EMAIL_ADRESS=stagedp@aquarabe.mg
-EMAIL_PASSWORD=Sta1234$
+EMAIL_ADRESS=user@aquarabe.mg
+EMAIL_PASSWORD=MyUserPassword1234
 
 # Compte administrateur par défaut
-ADMIN_DEFAULT_LOGIN=onehradmin@admin.aquarelle
-ADMIN_DEFAULT_PASSWORD=onehradmin_1010
+ADMIN_DEFAULT_LOGIN=admin@aquarabe.mg
+ADMIN_DEFAULT_PASSWORD=MyAdminPassword1234
 ```
 
 ⚠️ **Important**
@@ -145,5 +145,3 @@ Aucune licence open-source.
 ## ✍️ Auteur
 
 **RAHASINIAINA Aristod Davidson**
-
-```

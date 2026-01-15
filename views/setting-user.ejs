@@ -53,7 +53,6 @@
                   </p>
                   <p class="card-header-title">
                   </p>
-                  <!-- <a class="button green px-5" href="/settings/user/new">new</a> -->
                 </header>
                 <div class="card-content">
                   <table>
@@ -69,38 +68,40 @@
                     </thead>
                     <tbody id="medicalTable">
                       <% data.forEach(element=> {%>
-                        <tr>
-                          <td class="image-cell">
-                            <div class="image">
-                              <img src="/img/abstract-user-flat-3.png" class="rounded-full">
-                            </div>
-                          </td>
-                          <td data-label="Name" data-maxlength="20" title="<%= element.employee.matricule%>">
-                            <%= element.employee.matricule %>
-                          </td>
-                          <td data-label="Name" data-maxlength="30" title="<%= element.employee.fullname %>">
-                            <%= element.employee.fullname %>
-                          </td>
-                          <td data-label="Name" data-maxlength="30" title="<%= element.email %>">
-                            <%= element.email %>
-                          </td>
-                          <td data-label="Name" data-maxlength="20" title="<%= element.role %>">
-                            <%= element.role %>
-                          </td>
-                          <td class="actions-cell">
-                            <div class="buttons right nowrap">
-                              <button class="button small green" name="editButton" data-btn-name="editButton"
-                                type="button" data-id="<%= element.id %>">
-                                <span class="icon"><i class="mdi mdi-pencil"></i></span>
-                              </button>
-                              <button class="button small red --jb-modal" data-target="modal-delete" type="button"
-                                data-id="<%= element.id %>" data-name="<%= element.employee.fullname %>">
-                                <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                        <% }); %>
+                        <% if (element.role !==UserRole.SUPER_ADMIN) { %>
+                          <tr>
+                            <td class="image-cell">
+                              <div class="image">
+                                <img src="/img/abstract-user-flat-3.png" class="rounded-full">
+                              </div>
+                            </td>
+                            <td data-label="Name" data-maxlength="20" title="<%= element.employee.matricule%>">
+                              <%= element.employee.matricule %>
+                            </td>
+                            <td data-label="Name" data-maxlength="30" title="<%= element.employee.fullname %>">
+                              <%= element.employee.fullname %>
+                            </td>
+                            <td data-label="Name" data-maxlength="30" title="<%= element.email %>">
+                              <%= element.email %>
+                            </td>
+                            <td data-label="Name" data-maxlength="20" title="<%= element.role %>">
+                              <%= element.role %>
+                            </td>
+                            <td class="actions-cell">
+                              <div class="buttons right nowrap">
+                                <button class="button small green" name="editButton" data-btn-name="editButton"
+                                  type="button" data-id="<%= element.id %>">
+                                  <span class="icon"><i class="mdi mdi-pencil"></i></span>
+                                </button>
+                                <button class="button small red --jb-modal" data-target="modal-delete" type="button"
+                                  data-id="<%= element.id %>" data-name="<%= element.employee.fullname %>">
+                                  <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <% }%>
+                            <% }); %>
 
                     </tbody>
                   </table>

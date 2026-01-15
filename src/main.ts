@@ -13,12 +13,12 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: 'keyboard_cat',
+      secret: 'avahelanehufahealfaecyakjkefhjayebfkzrghfycbkzgfczb;vjdkvtqfqjvnlcqgefkqkdjfqgsfyukgqkdjjcnqkfyu',
       resave: false,
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60,
+        // maxAge: 1000 * 60 * 60,
       },
     }),
   );

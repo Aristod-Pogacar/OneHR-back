@@ -1,237 +1,241 @@
 <%- include('partials/header') %>
-<body>
-<style>
-.autocomplete-list {
-  border: 1px solid #ddd;
-  max-height: 200px;
-  overflow-y: auto;
-  background: white;
-  position: absolute;
-  width: 100%;
-  z-index: 1000;
-}
-.autocomplete-list li {
-  padding: 8px;
-  cursor: pointer;
-}
-.autocomplete-list li:hover {
-  background: #f0f0f0;
-}
-</style>
 
-<div id="app">
-
-<%- include('partials/navbar-menu') %>
-
-<%- include('partials/aside') %>
-
-<%- include('partials/title-bar') %>
-
-  <section class="section main-section">
-        <div class="card mb-6">
-      <header class="card-header">
-        <p class="card-header-title">
-          <span class="icon"><i class="mdi mdi-ballot"></i></span>
-          New user
-        </p>
-      </header>
-      <div class="card-content">
-        <form action="/settings/user/create" method="post">
-          <div class="field">
-            <label class="label" for="matriculeSearch">Matricule</label>
-            <div class="field-body">
-              <div class="field">
-                <div class="control icons-left">
-                  <input
-                    class="input"
-                    type="text"
-                    id="employeeSearch"
-                    placeholder="Search employee (matricule or name)"
-                    autocomplete="off"
-                  />
-                  <span class="icon left"><i class="mdi mdi-account"></i></span>
-                  <input type="text" class="input" name="matricule" id="matricule" hidden required>
-                  <ul id="employeeResults" class="autocomplete-list"></ul>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label" for="role">Role</label>
-                <div class="control icons-left">
-                  <select name="role" id="role" class="input" required>
-                    <% roles.forEach(role => { %>
-                      <option value="<%= role %>" <%= role === 'USER' ? 'selected' : '' %>><%= role %></option>
-                    <% }) %>
-                  </select>
-                  <span class="icon left"><i class="mdi mdi-shield-link-variant"></i></span>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label" for="email">Email</label>
-                <div class="control icons-left">
-                  <input class="input" type="email" placeholder="email@aquarelle.mg" name="email" id="email">
-                  <span class="icon left"><i class="mdi mdi-mail"></i></span>
-                </div>
-                <p class="help text-white" style="color: red;"><strong id="emailError"></strong></p>
-              </div>
-              <div class="field">
-                <label class="label" for="password">Password</label>
-                <div class="control icons-left">
-                  <input class="input" type="password" placeholder="Password" name="password" id="password" required>
-                  <span class="icon left"><i class="mdi mdi-lock"></i></span>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label" for="confirm_password">Confirm Password</label>
-                <div class="control icons-left">
-                  <input class="input" type="password" placeholder="Confirm Password" name="confirm_password" id="confirm_password" required>
-                  <span class="icon left"><i class="mdi mdi-lock"></i></span>
-                </div>
-                <p class="help text-white" style="color: red;"><strong id="passwordError"></strong></p>
-              </div>
-            </div>
-          </div>
-          <hr>
-
-          <div class="field grouped">
-            <div class="control">
-              <!-- <button type="submit" class="button green" id="submit" disabled>
-                Submit
-              </button> -->
-              <button type="submit" class="button green disabled:bg-gray-400" id="submit" disabled>
-                Submit
-              </button>
-            </div>
-            <div class="control">
-              <button type="reset" class="button red" onclick="window.history.back()">
-                Cancel
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-  </section>
-
-<script>
-const input = document.getElementById('employeeSearch');
-const results = document.getElementById('employeeResults');
-const hiddenInput = document.getElementById('matricule');
-const submitButton = document.getElementById('submit');
-
-let timeout = null;
-
-input.addEventListener('input', () => {
-  clearTimeout(timeout);
-
-  const query = input.value.trim();
-  if (query.length < 2) {
-    results.innerHTML = '';
-    return;
-  }
-
-  timeout = setTimeout(async () => {
-    try {
-      const res = await fetch(`/employee/finding/search-list?q=${query}`);
-
-      if (!res.ok) {
-        console.error('HTTP error', res.status);
-        return;
+  <body>
+    <style>
+      .autocomplete-list {
+        border: 1px solid #ddd;
+        max-height: 200px;
+        overflow-y: auto;
+        background: white;
+        position: absolute;
+        width: 100%;
+        z-index: 1000;
       }
 
-      const data = await res.json();
+      .autocomplete-list li {
+        padding: 8px;
+        cursor: pointer;
+      }
 
-      results.innerHTML = '';
-      data.forEach(emp => {
-        const li = document.createElement('li');
-        li.textContent = `${emp.matricule} - ${emp.fullname}`;
-        li.onclick = () => {
-          input.value = li.textContent;
-          hiddenInput.value = emp.matricule;
-          results.innerHTML = '';
-        };
-        results.appendChild(li);
-      });
+      .autocomplete-list li:hover {
+        background: #f0f0f0;
+      }
+    </style>
 
-    } catch (err) {
-      console.error('Autocomplete error:', err);
-    }
-  }, 300);
-});
-</script>
-<script>
-  const email = document.getElementById("email");
-  const roleSelect = document.getElementById("role");
-  const password = document.getElementById("password");
-  const confirmPassword = document.getElementById("confirm_password");
+    <div id="app">
 
-  var emailValide = false;
-  var passwordValide= false;
+      <%- include('partials/navbar-menu') %>
 
-  function validateEmail() {
-    if (email.value === "" && roleSelect.value === "PAYROLL_OFFICER") {
-      document.getElementById("emailError").style.display = "block";
-      document.getElementById("emailError").textContent = "Email is required for PAYROLL_OFFICER !!";
-      emailValide = false;
-    } else if (!isEmailValid(email.value) && email.value != '') {
-      document.getElementById("emailError").style.display = "block";
-      document.getElementById("emailError").textContent = "Email is not valid !!";
-      emailValide = false;
-    } else {
-      document.getElementById("emailError").style.display = "none";
-      emailValide = true;
-    }
-  }
-  function isEmailValid(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  }
+        <%- include('partials/aside') %>
 
-  function validatePassword() {
-    if (password.value !== confirmPassword.value) {
-      passwordValide = false;
-      document.getElementById("passwordError").style.display = "block";
-      document.getElementById("passwordError").textContent = "Passwords mismatch !!";
-    } else {
-      passwordValide = true;
-      document.getElementById("passwordError").style.display = "none";
-    }
-  }
+          <%- include('partials/title-bar') %>
 
-  function isValide() {
-    var val = false;
-    if (hiddenInput.value != "" && roleSelect.value != "" && emailValide && passwordValide) {
-      submitButton.disabled = false;
-      val = true;
-    } else {
-      submitButton.disabled = true;
-    }
-    return val;
-  }
+            <section class="section main-section">
+              <div class="card mb-6">
+                <header class="card-header">
+                  <p class="card-header-title">
+                    <span class="icon"><i class="mdi mdi-ballot"></i></span>
+                    New user
+                  </p>
+                </header>
+                <div class="card-content">
+                  <form action="/settings/user/create" method="post">
+                    <div class="field">
+                      <label class="label" for="matriculeSearch">Matricule</label>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control icons-left">
+                            <input class="input" type="text" id="employeeSearch"
+                              placeholder="Search employee (matricule or name)" autocomplete="off" />
+                            <span class="icon left"><i class="mdi mdi-account"></i></span>
+                            <input type="text" class="input" name="matricule" id="matricule" hidden required>
+                            <ul id="employeeResults" class="autocomplete-list"></ul>
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label" for="role">Role</label>
+                          <div class="control icons-left">
+                            <select name="role" id="role" class="input" required>
+                              <% roles.forEach(role=> { %>
+                                <% if (role !==UserRole.SUPER_ADMIN) { %>
+                                  <option value="<%= role %>" <%=role==='USER' ? 'selected' : '' %>><%= role %>
+                                  </option>
+                                  <% } %>
+                                    <% }) %>
+                            </select>
+                            <span class="icon left"><i class="mdi mdi-shield-link-variant"></i></span>
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label" for="email">Email</label>
+                          <div class="control icons-left">
+                            <input class="input" type="email" placeholder="email@aquarelle.mg" name="email" id="email">
+                            <span class="icon left"><i class="mdi mdi-mail"></i></span>
+                          </div>
+                          <p class="help text-white" style="color: red;"><strong id="emailError"></strong></p>
+                        </div>
+                        <div class="field">
+                          <label class="label" for="password">Password</label>
+                          <div class="control icons-left">
+                            <input class="input" type="password" placeholder="Password" name="password" id="password"
+                              required>
+                            <span class="icon left"><i class="mdi mdi-lock"></i></span>
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label" for="confirm_password">Confirm Password</label>
+                          <div class="control icons-left">
+                            <input class="input" type="password" placeholder="Confirm Password" name="confirm_password"
+                              id="confirm_password" required>
+                            <span class="icon left"><i class="mdi mdi-lock"></i></span>
+                          </div>
+                          <p class="help text-white" style="color: red;"><strong id="passwordError"></strong></p>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
 
-  email.addEventListener('input', () => {
-    validateEmail();
-    isValide();
-  })
+                    <div class="field grouped">
+                      <div class="control">
+                        <!-- <button type="submit" class="button green" id="submit" disabled>
+                Submit
+              </button> -->
+                        <button type="submit" class="button green disabled:bg-gray-400" id="submit" disabled>
+                          Submit
+                        </button>
+                      </div>
+                      <div class="control">
+                        <button type="reset" class="button red" onclick="window.history.back()">
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
 
-  roleSelect.addEventListener('change', () => {
-    validateEmail();
-    isValide();
-  })
+            </section>
 
-  password.addEventListener('input', () => {
-    validatePassword();
-    isValide();
-  })
+            <script>
+              const input = document.getElementById('employeeSearch');
+              const results = document.getElementById('employeeResults');
+              const hiddenInput = document.getElementById('matricule');
+              const submitButton = document.getElementById('submit');
 
-  confirmPassword.addEventListener('input', () => {
-    validatePassword();
-    isValide();
-  })
+              let timeout = null;
 
-</script>
+              input.addEventListener('input', () => {
+                clearTimeout(timeout);
 
-<%- include('partials/footer') %>
-<!-- Insère ce script juste avant la fermeture de body -->
-</body>
-</html>
+                const query = input.value.trim();
+                if (query.length < 2) {
+                  results.innerHTML = '';
+                  return;
+                }
+
+                timeout = setTimeout(async () => {
+                  try {
+                    const res = await fetch(`/employee/finding/search-list?q=${query}`);
+
+                    if (!res.ok) {
+                      console.error('HTTP error', res.status);
+                      return;
+                    }
+
+                    const data = await res.json();
+
+                    results.innerHTML = '';
+                    data.forEach(emp => {
+                      const li = document.createElement('li');
+                      li.textContent = `${emp.matricule} - ${emp.fullname}`;
+                      li.onclick = () => {
+                        input.value = li.textContent;
+                        hiddenInput.value = emp.matricule;
+                        results.innerHTML = '';
+                      };
+                      results.appendChild(li);
+                    });
+
+                  } catch (err) {
+                    console.error('Autocomplete error:', err);
+                  }
+                }, 300);
+              });
+            </script>
+            <script>
+              const email = document.getElementById("email");
+              const roleSelect = document.getElementById("role");
+              const password = document.getElementById("password");
+              const confirmPassword = document.getElementById("confirm_password");
+
+              var emailValide = false;
+              var passwordValide = false;
+
+              function validateEmail() {
+                if (email.value === "" && roleSelect.value === "PAYROLL_OFFICER") {
+                  document.getElementById("emailError").style.display = "block";
+                  document.getElementById("emailError").textContent = "Email is required for PAYROLL_OFFICER !!";
+                  emailValide = false;
+                } else if (!isEmailValid(email.value) && email.value != '') {
+                  document.getElementById("emailError").style.display = "block";
+                  document.getElementById("emailError").textContent = "Email is not valid !!";
+                  emailValide = false;
+                } else {
+                  document.getElementById("emailError").style.display = "none";
+                  emailValide = true;
+                }
+              }
+              function isEmailValid(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+              }
+
+              function validatePassword() {
+                if (password.value !== confirmPassword.value) {
+                  passwordValide = false;
+                  document.getElementById("passwordError").style.display = "block";
+                  document.getElementById("passwordError").textContent = "Passwords mismatch !!";
+                } else {
+                  passwordValide = true;
+                  document.getElementById("passwordError").style.display = "none";
+                }
+              }
+
+              function isValide() {
+                var val = false;
+                if (hiddenInput.value != "" && roleSelect.value != "" && emailValide && passwordValide) {
+                  submitButton.disabled = false;
+                  val = true;
+                } else {
+                  submitButton.disabled = true;
+                }
+                return val;
+              }
+
+              email.addEventListener('input', () => {
+                validateEmail();
+                isValide();
+              })
+
+              roleSelect.addEventListener('change', () => {
+                validateEmail();
+                isValide();
+              })
+
+              password.addEventListener('input', () => {
+                validatePassword();
+                isValide();
+              })
+
+              confirmPassword.addEventListener('input', () => {
+                validatePassword();
+                isValide();
+              })
+
+            </script>
+
+            <%- include('partials/footer') %>
+              <!-- Insère ce script juste avant la fermeture de body -->
+  </body>
+
+  </html>
