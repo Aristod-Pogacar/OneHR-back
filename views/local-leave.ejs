@@ -1,18 +1,19 @@
 <%- include('partials/header') %>
-<body>
 
-<div id="app">
+  <body>
 
-<%- include('partials/navbar-menu') %>
+    <div id="app">
 
-<%- include('partials/aside') %>
+      <%- include('partials/navbar-menu') %>
 
-<%- include('partials/title-bar') %>
+        <%- include('partials/aside') %>
 
-  <section class="section main-section">
+          <%- include('partials/title-bar') %>
+
+            <section class="section main-section">
 
 
-<!-- 
+              <!-- 
     <div class="notification blue">
       <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
         <div>
@@ -23,61 +24,74 @@
       </div>
     </div> -->
 
-    <div class="card has-table">
-      <form action="" method="get">
-        <header class="card-header">
-          <p class="card-header-title">
-            <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-            Leaves
-          </p>
-          <p class="card-header-title">
-            <span class="icon"><i class="mdi mdi-card-search-outline"></i></span>
-            <input
-              type="text"
-              id="searchInput"
-              name="search"
-              placeholder="Search..."
-              class="w-full p-2 border rounded mb-3"
-              value="<%= search %>"
-            />
-            <!-- <input
+              <div class="card has-table">
+                <form action="" method="get">
+                  <header class="card-header">
+                    <p class="card-header-title">
+                      <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
+                      Leaves
+                    </p>
+                    <p class="card-header-title">
+                      <span class="icon"><i class="mdi mdi-card-search-outline"></i></span>
+                      <input type="text" id="searchInput" name="search" placeholder="Search..."
+                        class="w-full p-2 border rounded mb-3" value="<%= search %>" />
+                      <!-- <input
               type="date"
               name="date"
               class="input"
             /> -->
-            <button class="button green" type="submit">
-              Search
-            </button>
-          </p>
-        </header>
-      <!-- </form> -->
-      <div class="card-content">
-        <table>
-          <thead>
-          <tr>
-            <th></th>
-            <th>Matricule</th>
-            <th>Fullname</th>
-            <th>Departement</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <!-- <th></th> -->
-          </tr>
-          </thead>
-          <tbody id="medicalTable">
-<% employees.forEach(element => {%>
-          <tr>
-            <td class="image-cell">
-              <div class="image">
-                <img src="/img/abstract-user-flat-3.png" class="rounded-full">
-              </div>
-            </td>
-            <td data-label="Matricule" data-maxlength="20" title="<%= element.employee.matricule %>"><%= element.employee.matricule %></td>
-            <td data-label="Fullname" data-maxlength="20" title="<%= element.employee.fullname %>"><%= element.employee.fullname %></td>
-            <td data-label="Departement" data-maxlength="20" title="<%= element.employee.departement %>"><%= element.employee.departement %></td>
-            <td data-label="Start Date" data-maxlength="20" title="<%= new Date(element.start_date).toLocaleDateString('en-US', { day: '2-digit',  month: 'long',  year: 'numeric'}) %>"><%= new Date(element.start_date).toLocaleDateString('en-US', { day: '2-digit',  month: 'long',  year: 'numeric'}) %></td>
-            <td data-label="End Date" data-maxlength="20" title="<%= new Date(element.end_date).toLocaleDateString('en-US', { day: '2-digit',  month: 'long',  year: 'numeric'}) %>"><%= new Date(element.end_date).toLocaleDateString('en-US', { day: '2-digit',  month: 'long',  year: 'numeric'}) %></td>
-            <!-- <td class="actions-cell">
+                      <button class="button green" type="submit">
+                        Search
+                      </button>
+                    </p>
+                  </header>
+                  <!-- </form> -->
+                  <div class="card-content">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th>Matricule</th>
+                          <th>Fullname</th>
+                          <th>Site</th>
+                          <th>Departement</th>
+                          <th>Start Date</th>
+                          <th>End Date</th>
+                          <!-- <th></th> -->
+                        </tr>
+                      </thead>
+                      <tbody id="medicalTable">
+                        <% employees.forEach(element=> {%>
+                          <tr>
+                            <td class="image-cell">
+                              <div class="image">
+                                <img src="/img/abstract-user-flat-3.png" class="rounded-full">
+                              </div>
+                            </td>
+                            <td data-label="Matricule" data-maxlength="20" title="<%= element.employee.matricule %>">
+                              <%= element.employee.matricule %>
+                            </td>
+                            <td data-label="Fullname" data-maxlength="20" title="<%= element.employee.fullname %>">
+                              <%= element.employee.fullname %>
+                            </td>
+                            <td data-label="Site" data-maxlength="20" title="<%= element.employee.site %>">
+                              <%= element.employee.site %>
+                            </td>
+                            <td data-label="Departement" data-maxlength="20"
+                              title="<%= element.employee.departement %>">
+                              <%= element.employee.departement %>
+                            </td>
+                            <td data-label="Start Date" data-maxlength="20"
+                              title="<%= new Date(element.start_date).toLocaleDateString('en-US', { day: '2-digit',  month: 'long',  year: 'numeric'}) %>">
+                              <%= new Date(element.start_date).toLocaleDateString('en-US', { day: '2-digit' ,
+                                month: 'long' , year: 'numeric' }) %>
+                            </td>
+                            <td data-label="End Date" data-maxlength="20"
+                              title="<%= new Date(element.end_date).toLocaleDateString('en-US', { day: '2-digit',  month: 'long',  year: 'numeric'}) %>">
+                              <%= new Date(element.end_date).toLocaleDateString('en-US', { day: '2-digit' ,
+                                month: 'long' , year: 'numeric' }) %>
+                            </td>
+                            <!-- <td class="actions-cell">
               <div class="buttons right nowrap">
                 <button class="button small green --jb-modal"  data-target="sample-modal-2" type="button">
                   <span class="icon"><i class="mdi mdi-eye"></i></span>
@@ -87,97 +101,100 @@
                 </button>
               </div>
             </td> -->
-          </tr>
-<% }); %>
+                          </tr>
+                          <% }); %>
 
-          </tbody>
-        </table>
+                      </tbody>
+                    </table>
 
-<% if (employees && employees.length === 0) { %>
-    <div class="card empty">
-      <div class="card-content">
-        <div>
-          <span class="icon large"><i class="mdi mdi-emoticon-sad mdi-48px"></i></span>
-        </div>
-        <p>Nothing's here…</p>
-      </div>
-    </div>
-<% } %>
+                    <% if (employees && employees.length===0) { %>
+                      <div class="card empty">
+                        <div class="card-content">
+                          <div>
+                            <span class="icon large"><i class="mdi mdi-emoticon-sad mdi-48px"></i></span>
+                          </div>
+                          <p>Nothing's here…</p>
+                        </div>
+                      </div>
+                      <% } %>
 
-    <div class="table-pagination">
-      <div class="flex items-center justify-between">
-        <div class="buttons">
+                        <div class="table-pagination">
+                          <div class="flex items-center justify-between">
+                            <div class="buttons">
 
-          <!-- Précédent -->
-          <% if (currentPage > 1) { %>
-            <a href="?page=<%= currentPage - 1 %>" class="button">
-              &lt;
-            </a>
-          <% } %>
+                              <!-- Précédent -->
+                              <% if (currentPage> 1) { %>
+                                <a href="?page=<%= currentPage - 1 %>" class="button">
+                                  &lt;
+                                </a>
+                                <% } %>
 
-          <!-- Page 1 -->
-          <% if (startPage > 1) { %>
-            <a href="?page=1" class="button">1</a>
-            <% if (startPage > 2) { %>
-              <span class="button disabled">...</span>
-            <% } %>
-          <% } %>
+                                  <!-- Page 1 -->
+                                  <% if (startPage> 1) { %>
+                                    <a href="?page=1" class="button">1</a>
+                                    <% if (startPage> 2) { %>
+                                      <span class="button disabled">...</span>
+                                      <% } %>
+                                        <% } %>
 
-          <!-- Pages visibles -->
-          <% for(let i = startPage; i <= endPage; i++) { %>
-            <a href="?page=<%= i %>"
-              class="button <%= i === currentPage ? 'active' : '' %>">
-              <%= i %>
-            </a>
-          <% } %>
+                                          <!-- Pages visibles -->
+                                          <% for(let i=startPage; i <=endPage; i++) { %>
+                                            <a href="?page=<%= i %>"
+                                              class="button <%= i === currentPage ? 'active' : '' %>">
+                                              <%= i %>
+                                            </a>
+                                            <% } %>
 
-          <!-- Dernière page -->
-          <% if (endPage < totalPages) { %>
-            <% if (endPage < totalPages - 1) { %>
-              <span class="button disabled">...</span>
-            <% } %>
-            <a href="?page=<%= totalPages %>" class="button"><%= totalPages %></a>
-          <% } %>
+                                              <!-- Dernière page -->
+                                              <% if (endPage < totalPages) { %>
+                                                <% if (endPage < totalPages - 1) { %>
+                                                  <span class="button disabled">...</span>
+                                                  <% } %>
+                                                    <a href="?page=<%= totalPages %>" class="button">
+                                                      <%= totalPages %>
+                                                    </a>
+                                                    <% } %>
 
-          <!-- Suivant -->
-          <% if (currentPage < totalPages) { %>
-            <a href="?page=<%= currentPage + 1 %>" class="button">
-              &gt;
-            </a>
-          <% } %>
+                                                      <!-- Suivant -->
+                                                      <% if (currentPage < totalPages) { %>
+                                                        <a href="?page=<%= currentPage + 1 %>" class="button">
+                                                          &gt;
+                                                        </a>
+                                                        <% } %>
 
-        </div>
+                            </div>
 
-        <small>Page <%= currentPage %> sur <%= totalPages %></small>
-      </div>
-    </div>
+                            <small>Page <%= currentPage %> sur <%= totalPages %></small>
+                          </div>
+                        </div>
 
-<script>
-  function filterTable() {
-    const input = document.getElementById("searchInput");
-    const filter = input.value.toLowerCase();
-    const tableBody = document.getElementById("medicalTable");
-    const rows = tableBody.getElementsByTagName("tr");
+                        <script>
+                          function filterTable() {
+                            const input = document.getElementById("searchInput");
+                            const filter = input.value.toLowerCase();
+                            const tableBody = document.getElementById("medicalTable");
+                            const rows = tableBody.getElementsByTagName("tr");
 
-    for (let i = 0; i < rows.length; i++) {
-      const cells = rows[i].getElementsByTagName("td");
-      let found = false;
+                            for (let i = 0; i < rows.length; i++) {
+                              const cells = rows[i].getElementsByTagName("td");
+                              let found = false;
 
-      for (let j = 0; j < cells.length; j++) {
-        if (cells[j].textContent.toLowerCase().includes(filter)) {
-          found = true;
-          break;
-        }
-      }
+                              for (let j = 0; j < cells.length; j++) {
+                                if (cells[j].textContent.toLowerCase().includes(filter)) {
+                                  found = true;
+                                  break;
+                                }
+                              }
 
-      rows[i].style.display = found ? "" : "none";
-    }
-  }
-</script>
+                              rows[i].style.display = found ? "" : "none";
+                            }
+                          }
+                        </script>
 
-      </div>
-    </div>
+                  </div>
+              </div>
 
-<%- include('partials/footer') %>
-</body>
-</html>
+              <%- include('partials/footer') %>
+  </body>
+
+  </html>

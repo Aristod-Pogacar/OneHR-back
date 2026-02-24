@@ -13,12 +13,13 @@ import { Payroll } from 'src/payroll/entities/payroll.entity';
 import { PayrollService } from 'src/payroll/payroll.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Employee, SmiaOstie, Leave, Permission2h, Payroll, User]),  // 🔥 OBLIGATOIRE
   ],
   controllers: [ViewsDashboardController],
-  providers: [EmployeeService, SmiaOstieService, LeaveService, Permission2hService, PayrollService, UsersService],
+  providers: [EmployeeService, SmiaOstieService, LeaveService, Permission2hService, PayrollService, UsersService, CryptoService],
 })
-export class ViewsDashboardModule {}
+export class ViewsDashboardModule { }

@@ -22,7 +22,25 @@
       <% } %>
         <% if (pageTitle=='Settings - Users' ) { %>
           <a class="button green px-5" href="/settings/user/new">new</a>
-          <!-- <button class="button green --jb-modal" type="button" data-target="modal-new">New</button> -->
           <% } %>
+            <% if (pageTitle=='Profil' || pageTitle=='Edit password' ) { %>
+              <a class="button green px-5" href="/views-profil/edit">Edit profil</a>
+              <% } %>
+                <% if (pageTitle=='Edit profil' ) { %>
+                  <a class="button green px-5" href="/views-profil/edit-password">Change password</a>
+                  <% } %>
+                    <% if (pageTitle=='Import from Master File' ) { %>
+                      <a class="button green px-5" href="/views-employee/import-password">Import password list</a>
+                      <% } %>
+                        <% if (pageTitle=='Import Password List' ) { %>
+                          <a class="button green px-5" href="/views-employee/import">Import employees from Master
+                            File</a>
+                          <% } %>
+                            <% if (pageTitle=='Permission 2h' ) { %>
+                              <a class="button green px-5" href="/views-employee/permission-2h-export">Export</a>
+                              <% } %>
+                                <% if (pageTitle=='Medical Service' ) { %>
+                                  <a class="button green px-5" href="/views-employee/medical-service-export">Export</a>
+                                  <% } %>
   </div>
 </section>

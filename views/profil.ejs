@@ -1,0 +1,104 @@
+<%- include('partials/header') %>
+
+  <body>
+
+    <div id="app">
+
+      <%- include('partials/navbar-menu') %>
+
+        <%- include('partials/aside') %>
+
+          <%- include('partials/title-bar') %>
+
+            <section class="section main-section">
+              <div class="card">
+                <header class="card-header">
+                  <p class="card-header-title">
+                    <span class="icon"><i class="mdi mdi-account"></i></span>
+                    Profile
+                  </p>
+                </header>
+                <div class="card-content">
+                  <div class="image w-48 h-48 mx-auto">
+                    <img src="/img/abstract-user-flat-3.png" alt="John Doe" class="rounded-full">
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Matricule</label>
+                    <div class="control">
+                      <input type="text" readonly value="<%= user.employee.matricule %>" class="input is-static">
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Fullname</label>
+                    <div class="control">
+                      <input type="text" readonly value="<%= user.employee.fullname %>" class="input is-static">
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Email</label>
+                    <div class="control">
+                      <input type="text" readonly value="<%= user.email %>" class="input is-static">
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Gender</label>
+                    <div class="control">
+                      <input type="text" readonly value="<%= user.employee.gender %>" class="input is-static">
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Occupation</label>
+                    <div class="control">
+                      <input type="text" readonly value="<%= user.employee.occupation %>" class="input is-static">
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Site</label>
+                    <div class="control">
+                      <% if (user.employee.site=="RABE" ) { %>
+                        <input type="text" readonly value="AQUARELLE ANTSIRABE" class="input is-static">
+                        <% } else if (user.employee.site=="TANA" ) { %>
+                          <input type="text" readonly value="AQUARELLE TANA" class="input is-static">
+                          <% } else if (user.employee.site=="LAG" ) { %>
+                            <input type="text" readonly value="LAGUNA ANTSIRABE" class="input is-static">
+                            <% } else { %>
+                              <input type="text" readonly value="Not specified" class="input is-static">
+                              <% } %>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Adress</label>
+                    <div class="control">
+                      <input type="text" readonly value="<%= user.employee.adress %>" class="input is-static">
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Sector</label>
+                    <div class="control">
+                      <input type="text" readonly value="<%= user.employee.sector %>" class="input is-static">
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Line</label>
+                    <div class="control">
+                      <input type="text" readonly value="<%= user.employee.line %>" class="input is-static">
+                    </div>
+                  </div>
+                </div>
+              </div>
+    </div>
+    </section>
+
+    <%- include('partials/footer') %>
+  </body>
+
+  </html>

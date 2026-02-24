@@ -4,12 +4,13 @@ import { EmployeeController } from './employee.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Employee } from './entities/employee.entity';
 import { Payroll } from 'src/payroll/entities/payroll.entity';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Employee, Payroll]),  // 🔥 OBLIGATOIRE
   ],
   controllers: [EmployeeController],
-  providers: [EmployeeService],
+  providers: [EmployeeService, CryptoService],
 })
 export class EmployeeModule { }

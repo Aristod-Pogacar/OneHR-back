@@ -6,6 +6,8 @@ import { Between, Repository } from 'typeorm';
 import { CreateSmiaOstieDto } from './dto/create-smia_ostie.dto';
 import { UpdateSmiaOstieDto } from './dto/update-smia_ostie.dto';
 import { SmiaOstie } from './entities/smia_ostie.entity';
+import { Response } from 'express';
+const ExcelJS = require('exceljs');
 
 @Injectable()
 export class SmiaOstieService {
@@ -107,32 +109,32 @@ export class SmiaOstieService {
     return await this.SmiaOstieRepo.findOne({ where: { id } });
   }
 
-async update(id: number, updateSmiaOstieDto: UpdateSmiaOstieDto) {
-  let employeeEntity = null;
+  async update(id: number, updateSmiaOstieDto: UpdateSmiaOstieDto) {
+    let employeeEntity = null;
 
-  // Si employee (matricule) est envoyé, alors on le remplace par l'entité
-  if (updateSmiaOstieDto.employee) {
-    employeeEntity = await this.employeeRepo.findOne({
-      where: { matricule: updateSmiaOstieDto.employee },
-    });
+    // Si employee (matricule) est envoyé, alors on le remplace par l'entité
+    if (updateSmiaOstieDto.employee) {
+      employeeEntity = await this.employeeRepo.findOne({
+        where: { matricule: updateSmiaOstieDto.employee },
+      });
 
-    if (!employeeEntity) {
-      throw new NotFoundException("Matricule introuvable");
+      if (!employeeEntity) {
+        throw new NotFoundException("Matricule introuvable");
+      }
     }
+
+    // On crée l'objet update
+    const updatePayload: any = {
+      ...updateSmiaOstieDto,
+    };
+
+    // Si employeeEntity existe, on remplace l'employee par l'entité
+    if (employeeEntity) {
+      updatePayload.employee = employeeEntity;
+    }
+
+    return this.SmiaOstieRepo.update(id, updatePayload);
   }
-
-  // On crée l'objet update
-  const updatePayload: any = {
-    ...updateSmiaOstieDto,
-  };
-
-  // Si employeeEntity existe, on remplace l'employee par l'entité
-  if (employeeEntity) {
-    updatePayload.employee = employeeEntity;
-  }
-
-  return this.SmiaOstieRepo.update(id, updatePayload);
-}
 
   async remove(id: number) {
     return await this.SmiaOstieRepo.delete(id);
@@ -179,22 +181,22 @@ async update(id: number, updateSmiaOstieDto: UpdateSmiaOstieDto) {
       totalPages: Math.ceil(total / limit),
     };
   }
-  
-  async paginateHistory(date: string,search: string, page: number, limit: number) {
+
+  async paginateHistory(date: string, search: string, page: number, limit: number) {
     const skip = (page - 1) * limit;
 
     const [data, total] = await this.SmiaOstieRepo
-    .createQueryBuilder('m')
-    .leftJoinAndSelect('m.employee', 'e')
-    .where(
-      '(e.matricule LIKE :search OR e.fullname LIKE :search OR e.departement LIKE :search OR m.reason LIKE :search)',
-      { search: `%${search}%` },
-    )
-    .andWhere(date ? 'DATE(m.date_at) = :date' : '1=1', { date })
-    .orderBy('m.date_at', 'DESC')
-    .skip(skip)
-    .take(limit)
-    .getManyAndCount();
+      .createQueryBuilder('m')
+      .leftJoinAndSelect('m.employee', 'e')
+      .where(
+        '(e.matricule LIKE :search OR e.fullname LIKE :search OR e.departement LIKE :search OR m.reason LIKE :search)',
+        { search: `%${search}%` },
+      )
+      .andWhere(date ? 'DATE(m.date_at) = :date' : '1=1', { date })
+      .orderBy('m.date_at', 'DESC')
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
 
     return {
       data,
@@ -207,7 +209,7 @@ async update(id: number, updateSmiaOstieDto: UpdateSmiaOstieDto) {
     const startOfDay = new Date(date);
     startOfDay.setHours(0, 0, 0, 0);
     console.log("startOfDay", startOfDay);
-    
+
     const endOfDay = new Date(date);
     endOfDay.setHours(23, 59, 59, 999);
     console.log("endOfDay", endOfDay);
@@ -230,5 +232,105 @@ async update(id: number, updateSmiaOstieDto: UpdateSmiaOstieDto) {
       },
     });
   }
+
+  async getSmiaOstie(date: string, site: string) {
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
+
+    return this.SmiaOstieRepo
+      .createQueryBuilder('p')
+      .leftJoinAndSelect('p.employee', 'e')
+      .where('p.date BETWEEN :start AND :end', { start, end })
+      .andWhere('e.site = :site', { site })
+      .getMany();
+  }
+
+  async exportSmiaOstieToExcel(
+    data: any[],
+    res: Response,
+    date: string,
+  ) {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('MEDICAL SERVICE');
+
+    /* ================= TITRE ================= */
+    worksheet.mergeCells('A1:H1');
+    const titleCell = worksheet.getCell('A1');
+    titleCell.value = `MEDICAL SERVICE - ${date}`;
+    titleCell.font = {
+      size: 16,
+      bold: true,
+    };
+    titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
+
+    /* ================= EN-TÊTES ================= */
+    worksheet.addRow([]);
+    const headerRow = worksheet.addRow([
+      'Matricule',
+      'Full name',
+      'Site',
+      'Reason',
+      'Date',
+    ]);
+
+    headerRow.eachCell((cell) => {
+      cell.font = { bold: true };
+      cell.alignment = { vertical: 'middle', horizontal: 'center' };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFEEEEEE' },
+      };
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+    });
+
+    /* ================= DONNÉES ================= */
+    data.forEach((p) => {
+      worksheet.addRow([
+        p.employee.matricule,
+        p.employee.fullname,
+        p.employee.site,
+        p.reason,
+        p.date,
+      ]);
+    });
+
+    /* ================= LARGEUR DES COLONNES ================= */
+    worksheet.columns = [
+      { width: 15 },
+      { width: 30 },
+      { width: 15 },
+      { width: 30 },
+      { width: 15 },
+      { width: 20 },
+      { width: 20 },
+    ];
+
+    /* ================= FOOTER ================= */
+    worksheet.addRow([]);
+    worksheet.addRow([`Exported on ${new Date().toLocaleString()}`]);
+
+    /* ================= RÉPONSE HTTP ================= */
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    );
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=medical_services_${date}.xlsx`,
+    );
+
+    await workbook.xlsx.write(res);
+    res.end();
+  }
+
 
 }

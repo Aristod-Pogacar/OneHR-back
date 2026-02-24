@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 
 export class CreateLeaveDto {
     @IsString()
@@ -14,6 +14,7 @@ export class CreateLeaveDto {
     end_date: string;
 
     @IsString()
+    @IsOptional()
     attach_file?: string; // chemin vers le fichier dans ton PC
 
     @IsString()

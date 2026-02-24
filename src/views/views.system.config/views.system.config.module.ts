@@ -9,12 +9,13 @@ import { PayrollService } from 'src/payroll/payroll.service';
 import { Payroll } from 'src/payroll/entities/payroll.entity';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Employee, MedicalService, Payroll, User]),  // 🔥 OBLIGATOIRE
   ],
   controllers: [ViewsSystemConfigController],
-  providers: [EmployeeService, MedicalServiceService, PayrollService, UsersService],
+  providers: [EmployeeService, MedicalServiceService, PayrollService, UsersService, CryptoService],
 })
-export class ViewsSystemConfigModule {}
+export class ViewsSystemConfigModule { }

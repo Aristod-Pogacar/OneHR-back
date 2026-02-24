@@ -1,0 +1,111 @@
+<%- include('partials/header') %>
+
+  <body>
+
+    <div id="app">
+
+      <%- include('partials/navbar-menu') %>
+
+        <%- include('partials/aside') %>
+
+          <%- include('partials/title-bar') %>
+
+            <section class="section main-section">
+              <div class="card">
+                <header class="card-header">
+                  <p class="card-header-title">
+                    <span class="icon"><i class="mdi mdi-account-circle"></i></span>
+                    Edit Profile
+                  </p>
+                </header>
+                <div class="card-content">
+                  <form method="post">
+                    <div class="field">
+                      <label class="label">Matricule</label>
+                      <div class="control">
+                        <input type="text" readonly value="<%= user.employee.matricule %>" class="input is-static">
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <label class="label">Full name</label>
+                      <div class="control">
+                        <input type="text" value="<%= user.employee.fullname %>" name="fullname" class="input">
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <label class="label">Email</label>
+                      <div class="control">
+                        <input type="email" value="<%= user.email %>" name="email" class="input">
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <label class="label">Gender</label>
+                      <div class="control">
+                        <select name="gender" id="gender" class="input">
+                          <option value="M" <% if (user.employee.gender=="M" ) { %>selected<% } %>>Male</option>
+                          <option value="F" <% if (user.employee.gender=="F" ) { %>selected<% } %>>Female</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <label class="label">Adress</label>
+                      <div class="control">
+                        <input type="text" value="<%= user.employee.adress %>" name="adress" class="input">
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <label class="label">Occupation</label>
+                      <div class="control">
+                        <input type="text" value="<%= user.employee.occupation %>" name="occupation" class="input">
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <label class="label">Sector</label>
+                      <div class="control">
+                        <input type="text" value="<%= user.employee.sector %>" name="sector" class="input">
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <label class="label">Line</label>
+                      <div class="control">
+                        <input type="text" value="<%= user.employee.line %>" name="line" class="input">
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <label class="label">Site</label>
+                      <div class="control">
+                        <select name="site" id="site" class="input">
+                          <option value="RABE" <% if (user.employee.site=="RABE" ) { %>selected<% } %>>AQUARELLE
+                              ANTSIRABE</option>
+                          <option value="TANA" <% if (user.employee.site=="TANA" ) { %>selected<% } %>>AQUARELLE TANA
+                          </option>
+                          <option value="LAG" <% if (user.employee.site=="LAG" ) { %>selected<% } %>>LAGUNA ANTSIRABE
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <div class="control">
+                        <button type="submit" class="button green">
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </section>
+
+            <%- include('partials/footer') %>
+  </body>
+
+  </html>

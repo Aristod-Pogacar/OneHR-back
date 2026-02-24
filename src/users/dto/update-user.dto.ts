@@ -10,7 +10,7 @@ import { UserRole } from '../entities/user.entity';
 
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-    
+
   @IsEnum(UserRole)
   role: UserRole;
 
@@ -18,8 +18,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsNotEmpty({ message: 'Email is required for Payroll Officer' })
   @IsEmail()
   email?: string;
-
-  @IsNotEmpty()
-  matricule: string;
 
 }

@@ -36,7 +36,7 @@ export class ViewsSystemConfigController {
   ) { }
 
   @Get('medical-service')
-  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @Render('setting-medical-service')
   async getMedicalService(@Req() req, @Query('search') search: string = '', @Query('page') page: number = 1) {
@@ -114,7 +114,7 @@ export class ViewsSystemConfigController {
   }
 
   @Get('payroll-list')
-  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @Render('setting-payroll')
   async getPayroll(@Req() req, @Query('search') search: string = '', @Query('page') page: string = '1') {
@@ -157,7 +157,7 @@ export class ViewsSystemConfigController {
   }
 
   @Post('payroll-list/create')
-  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   async createPayroll(
     @Body() body,
@@ -175,7 +175,7 @@ export class ViewsSystemConfigController {
   }
 
   @Post('payroll-list/update/:id')
-  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   async updatePayroll(
     @Body() body,
@@ -194,7 +194,7 @@ export class ViewsSystemConfigController {
   }
 
   @Post('payroll-list/create')
-  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   async createPayrollGeneric(
     @Body() body: { email: string; employee: string; password: string },
@@ -209,7 +209,7 @@ export class ViewsSystemConfigController {
   }
 
   @Get('payroll-list/new')
-  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @Render('setting-payroll-new')
   async getNewPayroll(@Req() req) {
@@ -223,7 +223,7 @@ export class ViewsSystemConfigController {
   }
 
   @Get('payroll-list/edit/:id')
-  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @Render('setting-payroll-edit')
   async getEditPayroll(@Req() req, @Param('id') id: string) {
@@ -243,7 +243,7 @@ export class ViewsSystemConfigController {
   }
 
   @Post('payroll-list/:id/edit')
-  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   async editPayroll(
     @Param('id') id: string,
@@ -258,7 +258,7 @@ export class ViewsSystemConfigController {
   }
 
   @Post('payroll-list/:id/delete')
-  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   async deletePayroll(
     @Param('id') id: string,
@@ -269,7 +269,7 @@ export class ViewsSystemConfigController {
   }
 
   @Get('user')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @Render('setting-user')
   async getUSer(@Req() req, @Query('search') search: string = '', @Query('page') page: string = '1') {
@@ -292,7 +292,7 @@ export class ViewsSystemConfigController {
   }
 
   @Post('user/create')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   async createUser(
     @Body() body,
@@ -313,7 +313,7 @@ export class ViewsSystemConfigController {
   }
 
   @Post('user/update/:id')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   async updateUser(
     @Body() body,
@@ -333,7 +333,7 @@ export class ViewsSystemConfigController {
   }
 
   @Post('user/create')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   async createUSerGeneric(
     @Body() body: { email: string; employee: string; password: string },
@@ -349,7 +349,7 @@ export class ViewsSystemConfigController {
   }
 
   @Get('user/new')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @Render('setting-user-new')
   async getNewUser(@Req() req) {
@@ -366,7 +366,7 @@ export class ViewsSystemConfigController {
   }
 
   @Get('user/edit/:id')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @Render('setting-user-edit')
   async getEditUser(@Req() req, @Param('id') id: string) {
@@ -389,7 +389,7 @@ export class ViewsSystemConfigController {
   }
 
   @Post('user/:id/edit')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   async editUser(
     @Param('id') id: string,
@@ -405,7 +405,7 @@ export class ViewsSystemConfigController {
   }
 
   @Post('user/:id/delete')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   async deleteUSer(
     @Param('id') id: string,
@@ -416,7 +416,7 @@ export class ViewsSystemConfigController {
   }
 
   @Get('user/payroll')
-  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.PAYROLL_OFFICER, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @Render('setting-user-payroll')
   async getUsersByRole(@Req() req, @Query('role') role: string = UserRole.PAYROLL_OFFICER) {

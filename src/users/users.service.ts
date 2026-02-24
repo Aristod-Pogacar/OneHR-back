@@ -154,4 +154,27 @@ export class UsersService {
     return this.userRepo.findOneBy({ id });
   }
 
+  async updatePassword(user: User, password: string) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return this.userRepo.update(user.id, { password: hashedPassword });
+  }
+
+  async findByEmail(email: string) {
+    return this.userRepo.findOneBy({ email });
+  }
+
+  async findHrAndPayrollBySameSite(employeeMatricule: string) {
+    return this.userRepo
+      .createQueryBuilder('u')
+      .innerJoinAndSelect('u.employee', 'e')
+      .innerJoin(Employee, 'refEmp', 'refEmp.matricule = :matricule', {
+        matricule: employeeMatricule,
+      })
+      .where('u.role IN (:...roles)', {
+        roles: [UserRole.PAYROLL_OFFICER, UserRole.HR_ADMIN],
+      })
+      .andWhere('e.site = refEmp.site')
+      .getMany();
+  }
+
 }

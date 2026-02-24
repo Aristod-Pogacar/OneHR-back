@@ -31,6 +31,15 @@ export class LeaveController {
     return this.leaveService.findOne(matricule);
   }
 
+  @Get(':matricule/:year/:month')
+  getEmployeeLeavesForMonth(
+    @Param('matricule') matricule: string,
+    @Param('year') year: number,
+    @Param('month') month: number
+  ) {
+    return this.leaveService.getEmployeeLeavesForMonth(matricule, year, month);
+  }
+
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateLeaveDto: UpdateLeaveDto) {
   //   return this.leaveService.update(+id, updateLeaveDto);

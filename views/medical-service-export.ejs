@@ -1,0 +1,67 @@
+<%- include('partials/header') %>
+
+  <body>
+
+    <div id="app">
+
+      <%- include('partials/navbar-menu') %>
+
+        <%- include('partials/aside') %>
+
+          <%- include('partials/title-bar') %>
+
+            <section class="section main-section">
+              <div class="card mb-6">
+                <header class="card-header">
+                  <p class="card-header-title">
+                    <span class="icon"><i class="mdi mdi-ballot"></i></span>
+                    Medical Service export
+                  </p>
+                </header>
+                <div class="card-content">
+                  <form action="/smia-ostie/export" method="get">
+                    <div class="field">
+                      <label class="label" for="date">Date</label>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control icons-left">
+                            <input class="input" type="date" name="date">
+                            <span class="icon left"><i class="mdi mdi-calendar"></i></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label" for="site">Site</label>
+                      <div class="field-body">
+                        <div class="field">
+                          <div class="control icons-left">
+                            <select name="site" id="site" class="input">
+                              <option value="RABE">Aquarelle Antsirabe</option>
+                              <option value="LAG">Laguna Antsirabe</option>
+                              <option value="TANA">Aquarelle Tanà</option>
+                            </select>
+                            <span class="icon left"><i class="mdi mdi-usine"></i></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field grouped">
+                      <div class="control">
+                        <button type="submit" class="button green">
+                          Export
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            </section>
+
+    </div>
+
+    <%- include('partials/footer') %>
+  </body>
+
+  </html>

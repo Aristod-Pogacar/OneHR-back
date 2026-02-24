@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { User } from './entities/user.entity';
 import { EmployeeService } from 'src/employee/employee.service';
 import { Employee } from 'src/employee/entities/employee.entity';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 // users.module.ts
 @Module({
@@ -16,6 +17,7 @@ import { Employee } from 'src/employee/entities/employee.entity';
   providers: [
     UsersService,
     EmployeeService,
+    CryptoService,
   ],
   exports: [
     UsersService, // 👈 exposé aux autres modules

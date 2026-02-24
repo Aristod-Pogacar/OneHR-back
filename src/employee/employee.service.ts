@@ -10,6 +10,7 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeDto } from './dto/employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { Employee } from './entities/employee.entity';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 async function punchin(page: Page) {
   await page.mouse.click(870, 170);
@@ -24,6 +25,7 @@ export class EmployeeService {
 
     @InjectRepository(Employee)
     private employeeRepo: Repository<Employee>,
+    private cryptoService: CryptoService,
   ) { }
 
   async paginate(page: number, limit: number, sit: string, search: string = '') {
@@ -35,13 +37,13 @@ export class EmployeeService {
       where: [{
         site: sit,
         fullname: Like('%' + search + '%')
-      },{
+      }, {
         site: sit,
         matricule: Like('%' + search + '%')
-      },{
+      }, {
         site: sit,
         occupation: Like('%' + search + '%')
-      },{
+      }, {
         site: sit,
         departement: Like('%' + search + '%')
       }]
@@ -109,9 +111,9 @@ export class EmployeeService {
   }
 
   async hashCode(data: any) {
-      const salt = await bcrypt.genSalt(10);
-      const hashed = await bcrypt.hashSync(data.matricule, salt)
-      return { "hashed": hashed }
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hashSync(data.matricule, salt)
+    return { "hashed": hashed }
   }
 
   async importFromExcel(file: Express.Multer.File) {
@@ -179,7 +181,7 @@ export class EmployeeService {
     const employee = this.employeeRepo.findOne({ where: { matricule } });
     console.log("Employee:", employee);
     return employee
-    
+
   }
 
   update(matricule: string, updateEmployeeDto: UpdateEmployeeDto) {
@@ -205,7 +207,20 @@ export class EmployeeService {
       .select(['e.matricule', 'e.fullname'])
       .take(10)
       .getManyAndCount();
-    console.log("Data:", data);  
+    console.log("Data:", data);
     return data;
   }
+
+  async updateEmployee(matricule: string, updateEmployeeDto: UpdateEmployeeDto) {
+    console.log("updating employee with matricule:", matricule);
+    return this.employeeRepo.update(matricule, updateEmployeeDto);
+  }
+
+  updatePassword(data) {
+    const encryptedPassword = this.cryptoService.encrypt("" + data.password);
+    console.log("ENCRYPTED PASSWORD:", encryptedPassword);
+
+    return this.employeeRepo.update(data.matricule, { password: encryptedPassword });
+  }
+
 }

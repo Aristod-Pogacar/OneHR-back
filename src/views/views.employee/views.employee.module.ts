@@ -5,12 +5,13 @@ import { Employee } from '../../employee/entities/employee.entity';
 import { EmployeeService } from '../../employee/employee.service';
 import { SmiaOstieService } from '../../smia_ostie/smia_ostie.service';
 import { SmiaOstie } from 'src/smia_ostie/entities/smia_ostie.entity';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Employee, SmiaOstie]),  // 🔥 OBLIGATOIRE
   ],
   controllers: [ViewsEmployeeController],
-  providers: [EmployeeService, SmiaOstieService],
+  providers: [EmployeeService, SmiaOstieService, CryptoService],
 })
-export class ViewsEmployeeModule {}
+export class ViewsEmployeeModule { }

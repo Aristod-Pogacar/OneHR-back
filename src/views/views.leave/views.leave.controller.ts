@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Post, Query, Render, Req, Res, Search, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Query, Render, Req, Res, Search, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Roles } from 'src/auth-service/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth-service/guard/role.guard';
@@ -65,6 +65,46 @@ export class ViewsLeaveController {
       "user": req.user
     }
   }
+
+  @Get('permission-2h/get/:id')
+  // @Roles(UserRole.ADMIN)
+  @UseGuards(SessionAuthGuard)
+  @Render('permission-2h')
+  async permission2hById(@Req() req, @Query('page') page = 1, @Query('search') search = '', @Query('date') date = '', @Param('id') id: string) {
+    const limit = 20;
+
+    const { data, total, totalPages } =
+      await this.permission2hService.paginatePermission2hById(Number.parseInt(id), search, Number(page), limit, date);
+
+    const currentPage = Number(page);
+    const maxButtons = 7;
+
+    console.log("DATA:", data);
+    let title = 'Permission 2h';
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = startPage + maxButtons - 1;
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    return {
+      totalPermissions: total,
+      currentPage,
+      totalPages,
+      startPage,
+      endPage,
+      employees: data,
+      total,
+      search,
+      site: '',
+      pageTitle: title,
+      "user": req.user
+    }
+  }
+
   @Get('permission-2h')
   // @Roles(UserRole.ADMIN)
   @UseGuards(SessionAuthGuard)

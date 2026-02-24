@@ -1,11 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Res, Query } from '@nestjs/common';
 import { Permission2hService } from './permission2h.service';
 import { CreatePermission2hDto } from './dto/create-permission2h.dto';
 import { UpdatePermission2hDto } from './dto/update-permission2h.dto';
+import { SessionAuthGuard } from 'src/auth-service/guard/session-auth.guard';
+import { Roles } from 'src/auth-service/decorators/roles.decorator';
+import { UserRole } from 'src/users/entities/user.entity';
+import { Response } from 'express';
+import { RolesGuard } from 'src/auth-service/guard/role.guard';
 
 @Controller('permission2h')
 export class Permission2hController {
-  constructor(private readonly permission2hService: Permission2hService) {}
+  constructor(private readonly permission2hService: Permission2hService) { }
+
+  @Get('export')
+  @UseGuards(SessionAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.HR_ADMIN, UserRole.PAYROLL_OFFICER)
+  async export(
+    @Res() res: Response,
+    @Query('date') date: string,
+    @Query('site') site: string,
+  ) {
+    const data = await this.permission2hService.getPermission2h(date, site);
+    console.log('DATA:', data);
+
+    await this.permission2hService.exportPermission2hToExcel(data, res, date);
+  }
 
   @Post()
   create(@Body() createPermission2hDto: CreatePermission2hDto) {
@@ -32,8 +51,4 @@ export class Permission2hController {
     return this.permission2hService.remove(+id);
   }
 
-  // @Post('send-email')
-  // sendEmail() {
-  //   return this.permission2hService.sendEmail();
-  // }
 }

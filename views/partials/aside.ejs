@@ -41,15 +41,18 @@
           </li>
         </ul>
       </li>
-      <% if ((user && user.role===UserRole.ADMIN) || (user && user.role===UserRole.SUPER_ADMIN)) { %>
-        <li class="<% if (pageTitle == 'Import from Master File') { %> active <% } %>">
+      <% if ((user && user.role===UserRole.ADMIN) || (user && user.role===UserRole.SUPER_ADMIN) || (user &&
+        user.role===UserRole.HR_ADMIN)) { %>
+        <li
+          class="<% if (pageTitle == 'Import from Master File' || pageTitle == 'Import Password List' || pageTitle == 'Import Password List') { %> active <% } %>">
           <a href="/views-employee/import">
             <span class="icon"><i class="mdi mdi-upload"></i></span>
             <span class="menu-item-label">Import</span>
           </a>
         </li>
         <% } %>
-          <li class="<% if (pageTitle == 'Medical Service') { %> active <% } %>">
+          <li
+            class="<% if (pageTitle == 'Medical Service' || pageTitle == 'Export medical service') { %> active <% } %>">
             <a href="/views-employee/medical-service/history">
               <span class="icon"><i class="mdi mdi-medical-bag"></i></span>
               <span class="menu-item-label">Medical services</span>
@@ -70,7 +73,7 @@
           <span class="menu-item-label">Permissions</span>
         </a>
       </li>
-      <li class="<% if (pageTitle == 'Permission 2h') { %> active <% } %>">
+      <li class="<% if (pageTitle == 'Permission 2h' || pageTitle == 'Export permission 2h') { %> active <% } %>">
         <a href="/views-leave/permission-2h">
           <span class="icon"><i class="mdi mdi-clock-outline"></i></span>
           <span class="menu-item-label">Permissions 2h</span>
@@ -78,7 +81,7 @@
       </li>
     </ul>
     <% if ((user && user.role===UserRole.ADMIN) || (user && user.role===UserRole.PAYROLL_OFFICER) || (user &&
-      user.role===UserRole.SUPER_ADMIN)) { %>
+      user.role===UserRole.SUPER_ADMIN) || (user && user.role===UserRole.HR_ADMIN)) { %>
       <p class="menu-label">Settings</p>
       <ul class="menu-list">
         <li class="<% if (pageTitle == 'Settings - Medical Service') { %> active <% } %>">
@@ -95,7 +98,8 @@
           </a>
         </li>
         <% } %>
-          <% if ((user && user.role===UserRole.ADMIN) || (user && user.role===UserRole.SUPER_ADMIN)) { %>
+          <% if ((user && user.role===UserRole.ADMIN) || (user && user.role===UserRole.SUPER_ADMIN) || (user &&
+            user.role===UserRole.HR_ADMIN)) { %>
             <li
               class="<% if (pageTitle == 'Settings - Users' || pageTitle == 'Settings - New User' || pageTitle == 'Settings - Edit User') { %> active <% } %>">
               <a href="/settings/user">

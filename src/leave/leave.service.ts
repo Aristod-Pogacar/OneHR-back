@@ -8,6 +8,7 @@ import { connect, delay, setDate } from "../function/function";
 import { CreateLeaveDto } from "./dto/create-leave.dto";
 import { UpdateLeaveDto } from "./dto/update-leave.dto";
 import { Leave } from "./entities/leave.entity";
+import { CryptoService } from 'src/crypto/crypto.service';
 
 const leaveTypeLocation = {
   Indisponibilite_AMD: { x: 140, y: 300 },
@@ -151,6 +152,7 @@ export class LeaveService {
 
     @InjectRepository(Leave)
     private leaveRepo: Repository<Leave>,
+    private cryptoService: CryptoService
   ) { }
 
   async postLeave(data: CreateLeaveDto, password: string) {
@@ -195,17 +197,19 @@ export class LeaveService {
   async create(createLeaveDto: CreateLeaveDto) {
     // console.log(createLeaveDto);
 
-    const password = "Test@2025";
     try {
+
+      const employ = await this.employeeRepo.findOne({
+        where: { matricule: createLeaveDto.matricule },
+      });
+      const password = this.cryptoService.decrypt(employ.password);
+      console.log("PASSWORD:", password);
 
       await this.postLeave(createLeaveDto, password);
       const leaveType = leaveTypeLocation[createLeaveDto.leave_type];
       console.log("leaveType:", createLeaveDto.leave_type, [leaveType]);
       // return leaveType
       // return createLeaveDto;
-      const employ = await this.employeeRepo.findOne({
-        where: { matricule: createLeaveDto.matricule },
-      });
       const leave = this.leaveRepo.create(createLeaveDto);
       leave.employee = employ;
       return this.leaveRepo.save(leave);
@@ -240,42 +244,42 @@ export class LeaveService {
     return this.leaveRepo.delete(id);
   }
 
-  
-async paginateLocalLeave(
-  search: string,
-  page: number,
-  limit: number,
-  leaveType?: string,
-) {
-  const skip = (page - 1) * limit;
 
-  const query = this.leaveRepo
-    .createQueryBuilder('leave')
-    .leftJoinAndSelect('leave.employee', 'employee');
+  async paginateLocalLeave(
+    search: string,
+    page: number,
+    limit: number,
+    leaveType?: string,
+  ) {
+    const skip = (page - 1) * limit;
 
-  // ✅ Recherche texte
-  if (search) {
-    query.where(
-      `
+    const query = this.leaveRepo
+      .createQueryBuilder('leave')
+      .leftJoinAndSelect('leave.employee', 'employee');
+
+    // ✅ Recherche texte
+    if (search) {
+      query.where(
+        `
       employee.matricule LIKE :search
       OR employee.fullname LIKE :search
       OR leave.start_date LIKE :search
       OR leave.end_date LIKE :search
       `,
-      { search: `%${search}%` },
-    );
-  }
+        { search: `%${search}%` },
+      );
+    }
 
-  // ✅ Filtre par type de congé
-  if (leaveType) {
-    query.andWhere('leave.leave_type = :leaveType', { leaveType });
-  }
+    // ✅ Filtre par type de congé
+    if (leaveType) {
+      query.andWhere('leave.leave_type = :leaveType', { leaveType });
+    }
 
-  const [data, total] = await query
-    .orderBy('leave.id', 'DESC')
-    .skip(skip)
-    .take(limit)
-    .getManyAndCount();
+    const [data, total] = await query
+      .orderBy('leave.id', 'DESC')
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
 
     return {
       data,
@@ -294,6 +298,27 @@ async paginateLocalLeave(
       .getRawOne();
 
     return parseInt(count, 10);
+  }
+  async getEmployeeLeavesForMonth(
+    matricule: string,
+    year: number,
+    month: number
+  ) {
+    const start = `${year}-${String(month).padStart(2, '0')}-01`;
+    const end = new Date(year, month, 0)
+      .toISOString()
+      .split('T')[0];
+
+    return this.leaveRepo
+      .createQueryBuilder('l')
+      .where('l.employee.matricule = :matricule', { matricule })
+      .andWhere(`
+      STR_TO_DATE(l.start_date, '%c/%e/%Y') <= :end
+    `, { end })
+      .andWhere(`
+      STR_TO_DATE(l.end_date, '%c/%e/%Y') >= :start
+    `, { start })
+      .getMany();
   }
 
 }

@@ -1,11 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Res } from '@nestjs/common';
 import { SmiaOstieService } from './smia_ostie.service';
 import { CreateSmiaOstieDto } from './dto/create-smia_ostie.dto';
 import { UpdateSmiaOstieDto } from './dto/update-smia_ostie.dto';
+import { SessionAuthGuard } from 'src/auth-service/guard/session-auth.guard';
+import { Roles } from 'src/auth-service/decorators/roles.decorator';
+import { UserRole } from 'src/users/entities/user.entity';
+import { RolesGuard } from 'src/auth-service/guard/role.guard';
+import { Response } from 'express';
 
 @Controller('smia-ostie')
 export class SmiaOstieController {
-  constructor(private readonly smiaOstieService: SmiaOstieService) {}
+  constructor(private readonly smiaOstieService: SmiaOstieService) { }
+
+  @Get('export')
+  @UseGuards(SessionAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.HR_ADMIN, UserRole.PAYROLL_OFFICER)
+  async export(
+    @Res() res: Response,
+    @Query('date') date: string,
+    @Query('site') site: string,
+  ) {
+    const data = await this.smiaOstieService.getSmiaOstie(date, site);
+    console.log('DATA:', data);
+
+    await this.smiaOstieService.exportSmiaOstieToExcel(data, res, date);
+  }
 
   @Post()
   create(@Body() createSmiaOstieDto: CreateSmiaOstieDto) {
@@ -16,14 +35,14 @@ export class SmiaOstieController {
   findAll() {
     return this.smiaOstieService.findAll();
   }
-  
+
   @Get('list/today')
   findByDateDoingToday() {
     return this.smiaOstieService.findByDateDoingToday();
   }
 
   @Post('list/by-date')
-  findByDate(@Body() {date}: {date: string}) {
+  findByDate(@Body() { date }: { date: string }) {
     return this.smiaOstieService.findByDate(new Date(date));
   }
 

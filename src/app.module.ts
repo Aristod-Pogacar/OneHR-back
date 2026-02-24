@@ -20,6 +20,13 @@ import { AuthViewController } from './auth-service/auth-service.controller';
 import { AuthServiceModule } from './auth-service/auth-service.module';
 import { SeedService } from './database/seed/seed.service';
 import { SeedModule } from './database/seed/seed.module';
+import { ViewsProfilService } from './views/views.profil/views.profil.service';
+import { ViewsProfilModule } from './views/views.profil/views.profil.module';
+import { CryptoService } from './crypto/crypto.service';
+import { PuppeteerService } from './puppeteer/puppeteer.service';
+import { PuppeteerController } from './puppeteer/puppeteer.controller';
+import { PuppeteerManagerService } from './puppeteer-manager/puppeteer-manager.service';
+import { PuppeteerModule } from './puppeteer/puppeteer.module';
 
 @Module({
   imports: [
@@ -64,8 +71,10 @@ import { SeedModule } from './database/seed/seed.module';
     UsersModule,
     AuthServiceModule,
     SeedModule,
+    ViewsProfilModule,
+    PuppeteerModule,
   ],
-  controllers: [AppController, AuthViewController],
-  providers: [AppService, AuthService],
+  controllers: [AppController, AuthViewController, PuppeteerController],
+  providers: [AppService, AuthService, ViewsProfilService, CryptoService, PuppeteerService, PuppeteerManagerService],
 })
 export class AppModule { }

@@ -73,39 +73,6 @@ export class ViewsEmployeeController {
     };
   }
 
-  // @Get('medical-service')
-  // @Render('medical-service')
-  // async today(@Query('page') page = 1) {
-  //   const limit = 20;
-
-  //   const { data, total, totalPages } =
-  //     await this.smiaOstieService.paginateToday(Number(page), limit);
-
-  //   const currentPage = Number(page);
-  //   const maxButtons = 7;
-
-  //   let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
-  //   let endPage = startPage + maxButtons - 1;
-
-  //   if (endPage > totalPages) {
-  //     endPage = totalPages;
-  //     startPage = Math.max(1, endPage - maxButtons + 1);
-  //   }
-
-  //   return {
-  //     inscriptions: data,
-  //     totalInscriptions: total,
-  //     currentPage,
-  //     totalPages,
-  //     startPage,
-  //     endPage,
-  //     employees: data,
-  //     total,
-  //     site : '',
-  //     pageTitle: 'Medical Service',
-  //   }
-  // }
-
   @Get('medical-service/history')
   // @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
   @UseGuards(SessionAuthGuard)
@@ -145,12 +112,23 @@ export class ViewsEmployeeController {
   }
 
   @Get('import')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @Render('employee-import')
   async import(@Req() req) {
     return {
       "pageTitle": "Import from Master File",
+      site: "",
+      "user": req.user
+    };
+  }
+  @Get('import-password')
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
+  @UseGuards(SessionAuthGuard, RolesGuard)
+  @Render('employee-import-password')
+  async importPassword(@Req() req) {
+    return {
+      "pageTitle": "Import Password List",
       site: "",
       "user": req.user
     };
@@ -172,7 +150,7 @@ export class ViewsEmployeeController {
   }
 
   @Post('import-from-excel')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
   @UseGuards(SessionAuthGuard, RolesGuard)
   @UseInterceptors(FileInterceptor('file'))
   async importFromExcel(
@@ -222,6 +200,67 @@ export class ViewsEmployeeController {
     } else {
       throw new BadRequestException('Aucun fichier reçu');
     }
+  }
+
+  @Post('import-password')
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
+  @UseGuards(SessionAuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async importFromPassword(
+    @Body() body: any,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response,
+  ) {
+
+    if (file) {
+      const workbook = XLSX.read(file.buffer, { type: 'buffer' });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+      const rows: any[] = XLSX.utils.sheet_to_json(worksheet);
+      const salt = await bcrypt.genSalt(10);
+
+      // 🎯 Sélectionner uniquement certains champs
+      const filtered = rows.map(row => ({
+        matricule: row['matricule'],
+        password: row['password']
+      }));
+
+      // ❗ ignorer lignes vides
+      const cleanData = filtered.filter(x => x.matricule);
+
+      for (const data of cleanData) {
+        console.log("DATA:", data);
+
+        await this.employeeService.updatePassword(data);
+      }
+      return res.redirect('/views-employee');
+    } else {
+      throw new BadRequestException('Aucun fichier reçu');
+    }
+  }
+
+  @Get('permission-2h-export')
+  @Render('permission-2h-export')
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
+  @UseGuards(SessionAuthGuard, RolesGuard)
+  async exportPermission2h(@Req() req) {
+    return {
+      "pageTitle": "Export permission 2h",
+      site: "",
+      "user": req.user
+    };
+  }
+
+  @Get('medical-service-export')
+  @Render('medical-service-export')
+  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.HR_ADMIN)
+  @UseGuards(SessionAuthGuard, RolesGuard)
+  async exportMedicalService(@Req() req) {
+    return {
+      "pageTitle": "Export medical service",
+      site: "",
+      "user": req.user
+    };
   }
 
 }

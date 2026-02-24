@@ -43,6 +43,15 @@ async function bootstrap() {
     next();
   });
 
+  app.enableCors({
+    origin: [
+      'http://127.0.0.1:8080',
+      'http://localhost:8080',
+      'https://ton-domaine.com'
+    ],
+    credentials: true
+  });
+
   app.useGlobalFilters(new NotFoundFilter());
 
   await app.listen(process.env.PORT ?? 3000);

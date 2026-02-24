@@ -10,12 +10,13 @@ import { Permission2hService } from 'src/permission2h/permission2h.service';
 import { Payroll } from 'src/payroll/entities/payroll.entity';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Employee, Leave, Permission2h, Payroll, User]),  // 🔥 OBLIGATOIRE
   ],
   controllers: [ViewsLeaveController],
-  providers: [EmployeeService, LeaveService, Permission2hService, UsersService],
+  providers: [EmployeeService, LeaveService, Permission2hService, UsersService, CryptoService],
 })
-export class ViewsLeaveModule {}
+export class ViewsLeaveModule { }
