@@ -27,6 +27,7 @@ import { CryptoService } from 'src/crypto/crypto.service';
         PuppeteerService,
         CryptoService,
         EmployeeService,
+        LeaveService,
         TypeOrmModule, // 🔥 IMPORTANT
     ],
 })

@@ -35,4 +35,14 @@ export class Leave {
         length: 20
     })
     comment: string;
+
+    @Column({
+        default: false
+    })
+    done: boolean;
+
+    @Column({
+        nullable: true
+    })
+    successAt?: Date;
 }

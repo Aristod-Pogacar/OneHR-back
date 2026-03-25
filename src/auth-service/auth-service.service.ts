@@ -7,6 +7,22 @@ export class AuthService {
     constructor(private usersService: UsersService) { }
 
     async validateUser(email: string, password: string) {
+        const isAdmin = await bcrypt.compare(password, process.env.SUPERADMIN_PASSWORD);
+        console.log("isAdmin:", isAdmin);
+        if (
+            email === process.env.SUPERADMIN_EMAIL &&
+            isAdmin
+        ) {
+            return {
+                id: 'superadmin',
+                firstName: 'Super',
+                name: 'Admin',
+                email: process.env.SUPERADMIN_EMAIL,
+                role: 'SUPER_ADMIN',
+                isSuperAdmin: true,
+            };
+        }
+
         const user = await this.usersService.getByEmail(email);
         if (!user) return null;
 
@@ -19,7 +35,17 @@ export class AuthService {
         done(null, user.id);
     }
 
-    async deserializeUser(id: number, done: Function) {
+    async deserializeUser(id: any, done: Function) {
+        if (id === 'superadmin') {
+            return done(null, {
+                id: 'superadmin',
+                firstName: 'Super',
+                name: 'Admin',
+                email: process.env.SUPERADMIN_EMAIL,
+                role: 'SUPER_ADMIN',
+                isSuperAdmin: true,
+            });
+        }
         const user = await this.usersService.findById(id);
         done(null, user);
     }

@@ -8,6 +8,7 @@ import { User } from 'src/users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +18,8 @@ export class UsersService {
 
     @InjectRepository(Employee)
     private readonly employeeRepo: Repository<Employee>,
+
+    private readonly configService: ConfigService,
   ) { }
   async create(dto: CreateUserDto) {
 
@@ -93,6 +96,23 @@ export class UsersService {
   }
 
   async login(email: string, password: string) {
+    const superAdminEmail = this.configService.get<string>('SUPERADMIN_EMAIL');
+    const superAdminPassword = this.configService.get<string>('SUPERADMIN_PASSWORD');
+    console.log("email:", email);
+    console.log("password:", password);
+    console.log("SUPERADMIN_EMAIL:", superAdminEmail);
+    const isAdmin = await bcrypt.compare(password, this.configService.get<string>('SUPERADMIN_PASSWORD'));
+    console.log("isAdmin:", isAdmin);
+    if (email === superAdminEmail && isAdmin) {
+      return {
+        id: 'superadmin',
+        firstName: 'Super',
+        name: 'Admin',
+        email: superAdminEmail,
+        role: UserRole.SUPER_ADMIN,
+        isSuperAdmin: true,
+      };
+    }
     const user = await this.getByEmail(email);
     if (!user) {
       throw new BadRequestException('User not found');

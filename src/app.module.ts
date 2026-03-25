@@ -27,9 +27,13 @@ import { PuppeteerService } from './puppeteer/puppeteer.service';
 import { PuppeteerController } from './puppeteer/puppeteer.controller';
 import { PuppeteerManagerService } from './puppeteer-manager/puppeteer-manager.service';
 import { PuppeteerModule } from './puppeteer/puppeteer.module';
+import { TaskService } from './task/task.service';
+import { TaskModule } from './task/task.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true, // ← rend les variables accessibles partout
     }),
@@ -73,8 +77,9 @@ import { PuppeteerModule } from './puppeteer/puppeteer.module';
     SeedModule,
     ViewsProfilModule,
     PuppeteerModule,
+    TaskModule,
   ],
   controllers: [AppController, AuthViewController, PuppeteerController],
-  providers: [AppService, AuthService, ViewsProfilService, CryptoService, PuppeteerService, PuppeteerManagerService],
+  providers: [AppService, AuthService, ViewsProfilService, CryptoService, PuppeteerService, PuppeteerManagerService, TaskService],
 })
 export class AppModule { }

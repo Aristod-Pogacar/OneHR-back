@@ -11,6 +11,7 @@ import { EmployeeDto } from './dto/employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { Employee } from './entities/employee.entity';
 import { CryptoService } from 'src/crypto/crypto.service';
+import { CompareAdminDto } from 'src/admin/dto/compare-admin.dto';
 
 async function punchin(page: Page) {
   await page.mouse.click(870, 170);
@@ -112,8 +113,14 @@ export class EmployeeService {
 
   async hashCode(data: any) {
     const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hashSync(data.matricule, salt)
+    const hashed = await bcrypt.hashSync(data.password, salt)
     return { "hashed": hashed }
+  }
+
+  async compare(compareAdminDto: CompareAdminDto) {
+    const employee = await this.employeeRepo.findOne({ where: { matricule: compareAdminDto.matricule } })
+    const compare = await bcrypt.compare(compareAdminDto.password, employee.appPassword);
+    return { "isEmployee": compare }
   }
 
   async importFromExcel(file: Express.Multer.File) {

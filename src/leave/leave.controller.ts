@@ -40,6 +40,15 @@ export class LeaveController {
     return this.leaveService.getEmployeeLeavesForMonth(matricule, year, month);
   }
 
+  @Post('count-leave-days')
+  countEmployeeLeaveDays(
+    @Body('matricule') matricule: string,
+    @Body('leave_type') leave_type: string,
+    @Body('year') year: number
+  ) {
+    return this.leaveService.countEmployeeLeaveDays(matricule, leave_type, year);
+  }
+
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateLeaveDto: UpdateLeaveDto) {
   //   return this.leaveService.update(+id, updateLeaveDto);

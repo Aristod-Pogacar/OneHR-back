@@ -6,7 +6,7 @@ import { CompareAdminDto } from './dto/compare-admin.dto';
 
 @Controller('admin')
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(private readonly adminService: AdminService) { }
 
   @Post()
   create(@Body() createAdminDto: CreateAdminDto) {
@@ -15,6 +15,8 @@ export class AdminController {
 
   @Post("compare")
   compare(@Body() compareAdminDto: CompareAdminDto) {
+    console.log("DTO:", compareAdminDto);
+
     return this.adminService.compare(compareAdminDto);
   }
 

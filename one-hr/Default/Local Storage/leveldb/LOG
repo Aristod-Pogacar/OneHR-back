@@ -1,5 +1,3 @@
-2026/02/10-09:02:16.607 3ef4 Reusing MANIFEST D:\Aquarelle\aqua-project\one-hr-back\one-hr\Default\Local Storage\leveldb/MANIFEST-000001
-2026/02/10-09:02:16.615 3ef4 Recovering log #143
-2026/02/10-09:02:17.106 3ef4 Level-0 table #146: started
-2026/02/10-09:02:17.474 3ef4 Level-0 table #146: 37126 bytes OK
-2026/02/10-09:02:17.738 3ef4 Delete type=0 #143
+2026/03/11-10:40:56.009 2a78 Reusing MANIFEST D:\DIGITAL\OneHR-back\one-hr\Default\Local Storage\leveldb/MANIFEST-000001
+2026/03/11-10:40:56.019 2a78 Recovering log #3
+2026/03/11-10:40:56.028 2a78 Reusing old log D:\DIGITAL\OneHR-back\one-hr\Default\Local Storage\leveldb/000003.log 

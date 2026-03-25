@@ -215,8 +215,9 @@ export class Permission2hService {
 
     const emailAdress = this.configService.get<string>('EMAIL_ADRESS')
     const emailPassword = this.configService.get<string>('EMAIL_PASSWORD')
-
-    await envoyerEmail(employee, entity, email, emailAdress, emailPassword);
+    if (email.length > 0) {
+      await envoyerEmail(employee, entity, email, emailAdress, emailPassword);
+    }
 
     // 3. Enregistrer
     return await this.permission2hRepository.save(entity);

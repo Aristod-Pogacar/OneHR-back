@@ -105,7 +105,7 @@ async function newLeave(page: Page, btn_new_leave: boolean, form: boolean, inact
               form = true;
               await delay(4000);
               console.log("✅ Bouton 'New Leave' cliqué");
-              await newPage.click('button[title="Submit"]');
+              // await newPage.click('button[title="Submit"]');
               await delay(3000);
               console.log("1- ✅ Bouton 'Submit' cliqué");
               await delay(3000);
@@ -194,6 +194,17 @@ export class LeaveService {
     });
   }
 
+  async doneLeave(leave: Leave) {
+    leave.done = true;
+    leave.successAt = new Date();
+    await this.leaveRepo.save(leave);
+    return leave;
+  }
+
+  async findLeavesNotDone() {
+    return this.leaveRepo.find({ where: { done: false } });
+  }
+
   async create(createLeaveDto: CreateLeaveDto) {
     // console.log(createLeaveDto);
 
@@ -202,6 +213,7 @@ export class LeaveService {
       const employ = await this.employeeRepo.findOne({
         where: { matricule: createLeaveDto.matricule },
       });
+      console.log("EMPLOYEE PASSWORD:", employ.password);
       const password = this.cryptoService.decrypt(employ.password);
       console.log("PASSWORD:", password);
 
@@ -288,6 +300,66 @@ export class LeaveService {
     };
   }
 
+  countDays(start: string, end: string): number {
+    const startDate = this.parseDate(start);
+    const endDate = this.parseDate(end);
+
+    const diff = endDate.getTime() - startDate.getTime();
+
+    const days = diff / (1000 * 60 * 60 * 24) + 1; // +1 car inclusif
+
+    return days;
+  }
+
+  parseDate(dateStr: string): Date {
+    const [month, day, year] = dateStr.split('/').map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  async countEmployeeLeaveDays(matricule: string, leave_type: string, year: number) {
+    const leaves = await this.leaveRepo.find({
+      where: {
+        employee: { matricule },
+        leave_type
+      },
+    });
+
+    let total = 0;
+
+    for (const leave of leaves) {
+      const start = this.parseDate(leave.start_date);
+      const end = this.parseDate(leave.end_date);
+
+      if (start.getFullYear() === year || end.getFullYear() === year) {
+        total += this.countDays(leave.start_date, leave.end_date);
+      }
+    }
+
+    return total;
+  }
+
+  async isLeaveAvailable(matricule: string, start: string, end: string) {
+    const newStart = this.parseDate(start);
+    const newEnd = this.parseDate(end);
+
+    const leaves = await this.leaveRepo.find({
+      where: {
+        employee: { matricule },
+      },
+    });
+
+    for (const leave of leaves) {
+      const existingStart = this.parseDate(leave.start_date);
+      const existingEnd = this.parseDate(leave.end_date);
+
+      if (newStart <= existingEnd && newEnd >= existingStart) {
+        return false; // conflit
+      }
+    }
+
+    return true;
+  }
+
   async countToday() {
     const today = new Date().toISOString().split('T')[0];
     const { count } = await this.leaveRepo
@@ -319,6 +391,15 @@ export class LeaveService {
       STR_TO_DATE(l.end_date, '%c/%e/%Y') >= :start
     `, { start })
       .getMany();
+  }
+
+  async save(data: CreateLeaveDto) {
+    const employee = await this.employeeRepo.findOne({
+      where: { matricule: data.matricule },
+    });
+    const leave = this.leaveRepo.create(data);
+    leave.employee = employee;
+    return this.leaveRepo.save(leave);
   }
 
 }

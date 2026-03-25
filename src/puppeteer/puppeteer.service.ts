@@ -10,6 +10,7 @@ import { Leave } from 'src/leave/entities/leave.entity';
 import { Response } from 'express';
 import { PuppeteerManagerService } from 'src/puppeteer-manager/puppeteer-manager.service';
 import { Repository } from 'typeorm';
+import * as path from 'path';
 
 const leaveTypeLocation = {
     Indisponibilite_AMD: { x: 140, y: 300 },
@@ -39,7 +40,7 @@ async function newLeave(page: Page, btn_new_leave: boolean, form: boolean, inact
         await delay(2000);
         // await page.mouse.click(370, 250);
         await delay(2000);
-        console.log("🕒 Navigation vers Congé...");
+        // console.log("🕒 Navigation vers Congé...");
         let isRunning = false;
         newPage.on("console", async (msg: any) => {
 
@@ -157,21 +158,23 @@ export class PuppeteerService {
         private readonly manager: PuppeteerManagerService
     ) { }
 
-    async start(sessionId: string, res: Response) {
+    async start(sessionId: string) {
         try {
             const { page } = this.manager.getSession(sessionId);
             await page.goto(this.config.get<string>('LOGIN_URL'), { timeout: 200000 });
             const result = { success: true }
             console.log("RESULTS:", result);
-            return res.status(200).json(result)
+            return result
+            // return res.status(200).json(result)
         } catch (error) {
             const result = { success: false }
             console.log("ERROR:", error);
-            return res.status(500).json(result)
+            return result
+            // return res.status(500).json(result)
         }
     }
 
-    async login(sessionId: string, username: string, password: string, res: Response) {
+    async login(sessionId: string, username: string, password: string) {
         const session = this.manager.getSession(sessionId);
 
         try {
@@ -206,7 +209,8 @@ export class PuppeteerService {
             console.log("✅ Connecté avec succès !");
             const result = { success: true }
             console.log("RESULTS:", result);
-            return res.status(200).json(result);
+            return result;
+            // return res.status(200).json(result);
             // session.page.on('framenavigated', frame => {
             //     if (frame === session.page.mainFrame()) {
             //         // console.log('Nouvelle URL:', frame.url());
@@ -223,11 +227,12 @@ export class PuppeteerService {
         } catch (error) {
             const result = { success: false }
             console.log("ERROR:", error);
-            return res.status(500).json(result)
+            return result;
+            // return res.status(500).json(result)
         }
     }
 
-    async goToLeave(sessionId: string, res: Response) {
+    async goToLeave(sessionId: string) {
         const session = this.manager.getSession(sessionId);
         const newPagePromise = new Promise<Page>(resolve =>
             session.page.browser().once('targetcreated', async target => {
@@ -257,10 +262,11 @@ export class PuppeteerService {
         session.state = 'LEAVE';
         const result = { success: true }
         console.log("RESULTS:", result);
-        return res.status(200).json(result);
+        // return res.status(200).json(result);
+        return result;
     }
 
-    async goToNewLeave(sessionId: string, res: Response) {
+    async goToNewLeave(sessionId: string) {
         const session = this.manager.getSession(sessionId);
         await session.newPage.waitForSelector('button.btn.btn-default', { visible: true });
         await session.newPage.evaluate(() => {
@@ -270,10 +276,11 @@ export class PuppeteerService {
         });
         const result = { success: true }
         console.log("RESULTS:", result);
-        return res.status(200).json(result);
+        // return res.status(200).json(result);
+        return result;
     }
 
-    async completeFormulaire(sessionId: string, data: CreateLeaveDto, res: Response) {
+    async completeFormulaire(sessionId: string, data: CreateLeaveDto) {
         const session = this.manager.getSession(sessionId);
         const leaveLocation = leaveTypeLocation[data.leave_type];
         await delay(2000);
@@ -310,12 +317,15 @@ export class PuppeteerService {
             throw new Error("Aucun champ file détecté");
         }
 
-        await fileInputs[0].uploadFile("D:/Aquarelle/aqua-project/one-hr-back/punch-in.png");
+        const filePath = path.join(process.cwd(), 'punch-in.png');
+        console.log("FILE PATH:", filePath);
+
+        await fileInputs[0].uploadFile(filePath);
         // await newPage.click('button[title="Submit"]');
         // D:/Aquarelle/aqua-project/one-hr-back/punch-in.png
         await delay(4000);
         console.log("✅ Bouton 'New Leave' cliqué");
-        await session.newPage.click('button[title="Submit"]');
+        // await session.newPage.click('button[title="Submit"]');
         // await delay(3000);
         // console.log("1- ✅ Bouton 'Submit' cliqué");
         // await delay(3000);
@@ -325,7 +335,8 @@ export class PuppeteerService {
 
         const result = { success: true }
         console.log("RESULTS:", result);
-        return res.status(200).json(result);
+        // return res.status(200).json(result);
+        return result;
     }
 
     // async goToLeave(sessionId: string, data: CreateLeaveDto) {

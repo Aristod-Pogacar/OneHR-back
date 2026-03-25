@@ -50,6 +50,16 @@ export class EmployeeController {
     return this.employeeService.hashCode(data);
   }
 
+  @Post('compare')
+  compare(@Body() data: any) {
+    return this.employeeService.compare(data);
+  }
+
+  @Post('update-password')
+  updatePassword(@Body() data: any) {
+    return this.employeeService.updatePassword(data);
+  }
+
   @Get('finding/search-list')
   async searchEmployees(@Query('q') q: string) {
     console.log("Searching for:", q);

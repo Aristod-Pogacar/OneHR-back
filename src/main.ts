@@ -47,7 +47,7 @@ async function bootstrap() {
     origin: [
       'http://127.0.0.1:8080',
       'http://localhost:8080',
-      'https://ton-domaine.com'
+      // 'https://ton-domaine.com'
     ],
     credentials: true
   });

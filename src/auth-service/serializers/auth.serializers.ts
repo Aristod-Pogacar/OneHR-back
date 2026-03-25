@@ -13,7 +13,17 @@ export class SessionSerializer extends PassportSerializer {
         done(null, user.id);
     }
 
-    async deserializeUser(userId: number, done: Function) {
+    async deserializeUser(userId: any, done: Function) {
+        if (userId === 'superadmin') {
+            return done(null, {
+                id: 'superadmin',
+                firstName: 'Super',
+                name: 'Admin',
+                email: process.env.SUPERADMIN_EMAIL,
+                role: 'SUPER_ADMIN',
+                isSuperAdmin: true,
+            });
+        }
         const user = await this.usersService.findById(userId);
         done(null, user);
     }
