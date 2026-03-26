@@ -1,6 +1,0 @@
-2026/03/11-10:53:04.306 49f8 Creating DB D:\DIGITAL\OneHR-back\sessions\cc25499e-973c-49fa-8f17-01009f33dde5\Default\IndexedDB\https_cieltextile.peoplestrong.com_0.indexeddb.leveldb since it was missing.
-2026/03/11-10:53:04.336 49f8 Reusing MANIFEST D:\DIGITAL\OneHR-back\sessions\cc25499e-973c-49fa-8f17-01009f33dde5\Default\IndexedDB\https_cieltextile.peoplestrong.com_0.indexeddb.leveldb/MANIFEST-000001
-2026/03/11-10:53:04.588 3ee4 Level-0 table #5: started
-2026/03/11-10:53:04.599 3ee4 Level-0 table #5: 3444 bytes OK
-2026/03/11-10:53:04.602 3ee4 Delete type=0 #3
-2026/03/11-10:53:04.606 49f8 Manual compaction at level-0 from '\x00\x07\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x08\x00\x00\x00' @ 0 : 0; will stop at (end)
