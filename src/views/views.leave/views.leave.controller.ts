@@ -50,6 +50,8 @@ export class ViewsLeaveController {
       startPage = Math.max(1, endPage - maxButtons + 1);
     }
 
+    console.log("DATA:", data);
+
     return {
       inscriptions: data,
       totalInscriptions: total,

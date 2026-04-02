@@ -86,79 +86,79 @@ export class PuppeteerController {
             throw new BadRequestException('Leave dates overlap with existing leave');
         }
 
-        const cumulBalance = calculateCumulBalance(parseDate(data.start_date));
-        console.log("CUMUL BALANCE:", cumulBalance);
+        // const cumulBalance = calculateCumulBalance(parseDate(data.start_date));
+        // console.log("CUMUL BALANCE:", cumulBalance);
 
-        const nbLeaveTaken = await this.leaveService.countEmployeeLeaveDays(data.matricule, "Local_Leave_AMD", new Date().getFullYear());
+        // const nbLeaveTaken = await this.leaveService.countEmployeeLeaveDays(data.matricule, "Local_Leave_AMD", new Date().getFullYear());
 
-        const nbDays = parseDate(data.end_date).getDate() - parseDate(data.start_date).getDate();
+        // const nbDays = parseDate(data.end_date).getDate() - parseDate(data.start_date).getDate();
 
-        const nbLeaveLeft = cumulBalance - nbLeaveTaken - nbDays;
+        // const nbLeaveLeft = cumulBalance - nbLeaveTaken - nbDays;
 
-        if (nbLeaveLeft < 0) {
-            throw new BadRequestException('Local leave solde not enough');
-        }
+        // if (nbLeaveLeft < 0) {
+        //     throw new BadRequestException('Local leave solde not enough');
+        // }
 
-        const nbPermissionTaken = await this.leaveService.countEmployeeLeaveDays(data.matricule, "Permission_AMD", new Date().getFullYear());
+        // const nbPermissionTaken = await this.leaveService.countEmployeeLeaveDays(data.matricule, "Permission_AMD", new Date().getFullYear());
 
-        const nbPermissionLeft = 10 - nbPermissionTaken - nbDays;
+        // const nbPermissionLeft = 10 - nbPermissionTaken - nbDays;
 
-        if (nbPermissionLeft < 0) {
-            throw new BadRequestException('Permission solde not enough');
-        }
-        console.log("NB PERMISSION LEFT:", nbPermissionLeft);
+        // if (nbPermissionLeft < 0) {
+        //     throw new BadRequestException('Permission solde not enough');
+        // }
+        // console.log("NB PERMISSION LEFT:", nbPermissionLeft);
 
-        // const employee = await this.employeeService.findOne(data.matricule);
-        // const sessionId = await this.manager.createSession();
+        const employee = await this.employeeService.findOne(data.matricule);
+        const sessionId = await this.manager.createSession();
         // console.log("SessionID:", sessionId);
         await delay(200);
-        // await this.bot.start(sessionId).then(async (startingResponse) => {
-        // console.log("STATUS:", startingResponse.success);
-        // console.log("RESPONSE:", startingResponse);
-        // if (startingResponse.success) {
-        //     await delay(5000);
-        //     const password = await this.cryptoService.decrypt(employee.password);
-        //     await this.bot.login(sessionId, employee.matricule, password).then(async (loginResponse) => {
-        //         if (loginResponse.success == true) {
-        //             await delay(5000);
-        //             await this.bot.goToLeave(sessionId).then(async (leaveResponse) => {
-        //                 if (leaveResponse.success == true) {
-        //                     await delay(5000);
-        //                     await this.bot.goToNewLeave(sessionId).then(async (newLeaveResponse) => {
-        //                         if (newLeaveResponse.success == true) {
-        //                             await delay(5000);
-        //                             await this.bot.completeFormulaire(sessionId, data).then(async (completeFormResponse) => {
-        //                                 if (completeFormResponse.success == true) {
-        //                                     console.log("✅ FORM COMPLETE");
-        //                                     await delay(5000);
-        const leave = await this.leaveService.save(data);
-        //                                     await this.manager.closeSession(sessionId);
-        res.status(200).json({ success: true, message: "LEAVE SAVED", leave: leave });
-        //                                 } else {
-        //                                     await this.manager.closeSession(sessionId);
-        //                                     res.status(500).json({ success: false, message: "❌ FORM NOT COMPLETE" });
-        //                                 }
-        //                             });
-        //                         } else {
-        //                             await this.manager.closeSession(sessionId);
-        //                             res.status(500).json({ success: false, message: "❌ NEW LEAVE NOT FOUND" });
-        //                         }
-        //                     });
-        //                 } else {
-        //                     await this.manager.closeSession(sessionId);
-        //                     res.status(500).json({ success: false, message: "❌ LEAVE NOT FOUND" });
-        //                 }
-        //             });
-        //         } else {
-        //             await this.manager.closeSession(sessionId);
-        //             res.status(500).json({ success: false, message: "❌ LOGIN FAILED" });
-        //         }
-        //     });
-        // } else {
-        //     await this.manager.closeSession(sessionId);
-        //     res.status(500).json({ success: false, message: "❌ START FAILED" });
-        // }
-        // });
+        await this.bot.start(sessionId).then(async (startingResponse) => {
+            console.log("STATUS:", startingResponse.success);
+            console.log("RESPONSE:", startingResponse);
+            if (startingResponse.success) {
+                await delay(5000);
+                const password = await this.cryptoService.decrypt(employee.password);
+                await this.bot.login(sessionId, employee.matricule, password).then(async (loginResponse) => {
+                    if (loginResponse.success == true) {
+                        await delay(5000);
+                        await this.bot.goToLeave(sessionId).then(async (leaveResponse) => {
+                            if (leaveResponse.success == true) {
+                                await delay(5000);
+                                await this.bot.goToNewLeave(sessionId).then(async (newLeaveResponse) => {
+                                    if (newLeaveResponse.success == true) {
+                                        await delay(5000);
+                                        await this.bot.completeFormulaire(sessionId, data).then(async (completeFormResponse) => {
+                                            if (completeFormResponse.success == true) {
+                                                console.log("✅ FORM COMPLETE");
+                                                await delay(5000);
+                                                const leave = await this.leaveService.save(data);
+                                                await this.manager.closeSession(sessionId);
+                                                res.status(200).json({ success: true, message: "LEAVE SAVED", leave: leave });
+                                            } else {
+                                                await this.manager.closeSession(sessionId);
+                                                res.status(500).json({ success: false, message: "❌ FORM NOT COMPLETE" });
+                                            }
+                                        });
+                                    } else {
+                                        await this.manager.closeSession(sessionId);
+                                        res.status(500).json({ success: false, message: "❌ NEW LEAVE NOT FOUND" });
+                                    }
+                                });
+                            } else {
+                                await this.manager.closeSession(sessionId);
+                                res.status(500).json({ success: false, message: "❌ LEAVE NOT FOUND" });
+                            }
+                        });
+                    } else {
+                        await this.manager.closeSession(sessionId);
+                        res.status(500).json({ success: false, message: "❌ LOGIN FAILED" });
+                    }
+                });
+            } else {
+                await this.manager.closeSession(sessionId);
+                res.status(500).json({ success: false, message: "❌ START FAILED" });
+            }
+        });
     }
 }
 
